@@ -2,22 +2,25 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Colores para el modo claro
-  static const primary = Color(0xff3498DB);
-  static const secondary = Color(0xff2ECC71);
-  static const lightBackground = Color(0xffF9F9F9);
-  static const primaryText = Color(0xff333333);
-  static const secondaryText = Color(0xff7F8C8D);
-  static const border = Color(0xffE0E0E0);
-  static const accent = Color(0xffE74C3C);
-  static const link = Color(0xff2980B9);
+  static const primary = Color(0xFF02EAFF); // Azul principal
+  static const secondary = Color(0xFF2ECC71); // Verde secundario
+  static const accent = Color(0xFFE74C3C); // Rojo acento
+  static const lightBackground = Color(0xFFF9F9F9); // Fondo claro
+  static const primaryText = Color(0xFF333333); // Texto principal
+  static const secondaryText = Color(0xFF7F8C8D); // Texto secundario
+  static const border = Color(0xFFE0E0E0); // Color del borde
+  static const link = Color(0xFF2980B9); // Color de enlaces
+  static const text = Color(0xFF151515); // Texto general
 
   // Colores para el modo oscuro
-  static const darkBackground = Color(0xff121212); 
-  static const darkPrimary = Color(0xff1E88E5);
-  static const darkSecondary = Color(0xff26A69A); 
-  static const darkPrimaryText = Color(0xffE0E0E0); 
-  static const darkSecondaryText = Color(0xffB0BEC5);
-  static const darkBorder = Color(0xff37474F); 
-  static const darkAccent = Color(0xffF44336);
-  static const darkLink = Color(0xff82B1FF);
+  static const darkPrimary = Color(0xFF0D9EFF); // Azul principal oscuro
+  static const darkSecondary = Color(0xFF26A69A); // Verde secundario oscuro
+  static const darkAccent = Color.fromARGB(255, 253, 20, 3); // Rojo acento en modo oscuro
+  static const darkBackground = Color.fromARGB(255, 0, 0, 0); // Fondo negro
+  // Fondo oscuro
+  static const darkPrimaryText = Color(0xFFE0E0E0); // Texto principal claro
+  static const darkSecondaryText = Color(0xFFB0BEC5); // Texto secundario claro
+  static const darkBorder = Color(0xFF37474F); // Color del borde en modo oscuro
+  static const darkLink = Color(0xFF82B1FF); // Color de enlaces en modo oscuro
+  static const darkText = Color(0xFFF7F7F7); // Texto general en modo oscuro
 }
