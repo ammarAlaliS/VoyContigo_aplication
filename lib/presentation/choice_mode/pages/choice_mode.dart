@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quickcar_aplication/common/widgets/basic_app_select_theme.dart';
 import 'package:quickcar_aplication/common/widgets/buttom/basic_app_buttom.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
@@ -14,14 +15,13 @@ class ChoiceMode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.white;
-    final textSecundary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+    final isDarkMode = theme.brightness == Brightness.dark;
 
     return SafeArea(
       child: Scaffold(
         body: Stack(
           children: [
-            // Fondo con imagen
+            // Background image
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -30,149 +30,87 @@ class ChoiceMode extends StatelessWidget {
                 ),
               ),
             ),
-            // Capa con opacidad (detrás de los elementos)
+            // Semi-transparent overlay
             Container(
               color: Colors.black.withOpacity(0.50),
             ),
-            // Elementos que deben estar por encima
+            // Elements above
             Padding(
               padding: const EdgeInsets.only(right: 0, bottom: 120, left: 0),
               child: Column(
                 children: [
-                  // Aplica el desenfoque solo al contenedor del logo
+                  // Logo with blur effect
                   ClipRect(
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 3.0),
                       child: Container(
-                        margin: EdgeInsets.only(
-                            top: 20, right: 40, bottom: 20, left: 40),
-                        child: Logo(),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 20),
+                        child: const Logo(),
                       ),
                     ),
                   ),
-
-                  Spacer(),
+                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Elige el modo',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.w900,
-                                color: textColor,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 40,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  children: [
-                                    ClipOval(
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                            sigmaX: 10, sigmaY: 10),
-                                        child: Container(
-                                          height: 80,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFF30393C).withOpacity(0.5),
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.2), // Color del borde
-                                              width: 1.0, // Ancho del borde
-                                              style: BorderStyle.solid, // Estilo del borde
-                                            ),
-                                          ),
-                                           child: SvgPicture.asset(
-                                            AppVectors.moon,
-                                            fit: BoxFit.none,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Modo Oscuro',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: textSecundary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 40,
-                                ),
-                                Column(
-                                  children: [
-                                    ClipOval(
-                                      child: BackdropFilter(
-                                        filter: ImageFilter.blur(
-                                            sigmaX: 10, sigmaY: 10),
-                                        child: Container(
-                                          height: 80,
-                                          width: 80,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFF30393C).withOpacity(0.5),
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.2), // Color del borde
-                                              width: 1.0, // Ancho del borde
-                                              style: BorderStyle.solid, // Estilo del borde
-                                            ),
-                                          ),
-                                          child: SvgPicture.asset(
-                                            AppVectors.sun,
-                                            fit: BoxFit.none,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Modo Claro',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: textSecundary,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 50),
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                          child: BasicAppButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ChoiceMode(), // Cambiado aquí
-                                ),
-                              );
-                            },
-                            title: 'CONTINUAR',
-                            height: 45,
+                        Text(
+                          'Seleccione un modo',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
                           ),
                         ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            BasicAppSelectTheme(
+                              initialCircleColor: isDarkMode
+                                  ? Color.fromARGB(255, 76, 76, 76) 
+                                  : Color.fromARGB(255, 255, 97, 6),
+                              initialIcon: SvgPicture.asset(AppVectors.moon),
+                              labelText: 'Oscuro',
+                              initialBorderColor: Colors.white,
+                              textColor: Colors.grey,
+                              onTap: () {},
+                            ),
+                            const SizedBox(width: 40),
+                            BasicAppSelectTheme(
+                              initialCircleColor: isDarkMode
+                                  ? Color.fromARGB(255, 255, 97, 6) 
+                                  : Color.fromARGB(255, 76, 76, 76),
+                              initialIcon: SvgPicture.asset(AppVectors.sun),
+                              labelText: 'Claro',
+                              initialBorderColor: Colors.white,
+                              textColor: Colors.grey,
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                         Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 20),
+                            child: BasicAppButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => ChoiceMode(), 
+                                  ),
+                                );
+                              },
+                              title: 'CONTINUAR',
+                              height: 45,
+                            ),
+                          ),
                       ],
                     ),
                   ),

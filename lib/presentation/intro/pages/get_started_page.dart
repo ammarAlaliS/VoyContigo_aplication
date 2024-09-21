@@ -12,9 +12,7 @@ class GetStartedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.white;
-    final textSecundary = theme.textTheme.bodyMedium?.color ?? Colors.grey;
+
 
     return SafeArea(
       child: Scaffold(
@@ -61,7 +59,7 @@ class GetStartedPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.w900,
-                              color: textColor,
+                              color: Colors.white,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -70,7 +68,7 @@ class GetStartedPage extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: textSecundary,
+                              color: Colors.grey,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -83,8 +81,7 @@ class GetStartedPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        ChoiceMode(), // Cambiado aquí
+                                    builder: (BuildContext context) => ChoiceMode(), 
                                   ),
                                 );
                               },

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
-import 'package:quickcar_aplication/core/configs/theme/app_colors.dart';
 import 'package:quickcar_aplication/presentation/intro/pages/get_started_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -24,7 +23,6 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.white;
     final scaffoldBgColor = theme.scaffoldBackgroundColor;
 
     return Scaffold(
@@ -36,21 +34,6 @@ class _SplashPageState extends State<SplashPage> {
             Image.asset(
               AppImages.logo,
               height: 75,
-            ),
-            ShaderMask(
-              shaderCallback: (bounds) => LinearGradient(
-                colors: [textColor, AppColors.primary],
-                tileMode: TileMode.clamp,
-              ).createShader(bounds),
-              child: Text(
-                'Quickcar',
-                style: TextStyle(
-                  fontSize: 36,
-                  fontWeight: FontWeight.w900,
-                  fontFamily: 'Satoshi',
-                  color: Colors.white, 
-                ),
-              ),
             ),
           ],
         ),
