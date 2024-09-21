@@ -1,14 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:quickcar_aplication/common/widgets/basic_app_select_theme.dart';
 import 'package:quickcar_aplication/common/widgets/buttom/basic_app_buttom.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
+import 'package:quickcar_aplication/presentation/choice_mode/bloc/theme_cubit.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';
-
 class ChoiceMode extends StatelessWidget {
   const ChoiceMode({super.key});
 
@@ -21,7 +23,7 @@ class ChoiceMode extends StatelessWidget {
       child: Scaffold(
         body: Stack(
           children: [
-            // Background image
+            // Imagen de fondo
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -30,16 +32,16 @@ class ChoiceMode extends StatelessWidget {
                 ),
               ),
             ),
-            // Semi-transparent overlay
+            // Capa semi-transparente
             Container(
               color: Colors.black.withOpacity(0.50),
             ),
-            // Elements above
+            // Elementos sobrepuestos
             Padding(
               padding: const EdgeInsets.only(right: 0, bottom: 120, left: 0),
               child: Column(
                 children: [
-                  // Logo with blur effect
+                  // Logo con efecto de blur
                   ClipRect(
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 1.0, sigmaY: 3.0),
@@ -55,7 +57,7 @@ class ChoiceMode extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Seleccione un modo',
                           style: TextStyle(
                             fontSize: 24,
@@ -63,54 +65,62 @@ class ChoiceMode extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Botón para activar el modo oscuro
                             BasicAppSelectTheme(
                               initialCircleColor: isDarkMode
-                                  ? Color.fromARGB(255, 76, 76, 76) 
-                                  : Color.fromARGB(255, 255, 97, 6),
+                                  ? const Color.fromARGB(255, 255, 97, 6)
+                                  : const Color.fromARGB(255, 76, 76, 76),
                               initialIcon: SvgPicture.asset(AppVectors.moon),
                               labelText: 'Oscuro',
                               initialBorderColor: Colors.white,
                               textColor: Colors.grey,
-                              onTap: () {},
+                              onTap: () {
+                                // Cambiar siempre al modo oscuro cuando se presione
+                                context.read<ThemeCubit>().updateTheme(ThemeMode.dark);
+                              },
                             ),
                             const SizedBox(width: 40),
+                            // Botón para activar el modo claro
                             BasicAppSelectTheme(
                               initialCircleColor: isDarkMode
-                                  ? Color.fromARGB(255, 255, 97, 6) 
-                                  : Color.fromARGB(255, 76, 76, 76),
+                                  ? const Color.fromARGB(255, 76, 76, 76)
+                                  : const Color.fromARGB(255, 255, 97, 6),
                               initialIcon: SvgPicture.asset(AppVectors.sun),
                               labelText: 'Claro',
                               initialBorderColor: Colors.white,
                               textColor: Colors.grey,
-                              onTap: () {},
+                              onTap: () {
+                                // Cambiar siempre al modo claro cuando se presione
+                                context.read<ThemeCubit>().updateTheme(ThemeMode.light);
+                              },
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
-                         Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 0, horizontal: 20),
-                            child: BasicAppButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => ChoiceMode(), 
-                                  ),
-                                );
-                              },
-                              title: 'CONTINUAR',
-                              height: 45,
-                            ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                          child: BasicAppButton(
+                            onPressed: () {
+                              // Acción al presionar el botón de continuar
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) => ChoiceMode(),
+                                ),
+                              );
+                            },
+                            title: 'CONTINUAR',
+                            height: 45,
                           ),
+                        ),
                       ],
                     ),
                   ),
@@ -123,3 +133,4 @@ class ChoiceMode extends StatelessWidget {
     );
   }
 }
+
