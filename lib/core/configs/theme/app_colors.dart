@@ -18,7 +18,7 @@ class AppColors {
   static const darkAccent = Color.fromARGB(255, 253, 20, 3); // Rojo acento en modo oscuro
   static const darkBackground = Color.fromARGB(255, 0, 0, 0); // Fondo negro
   // Fondo oscuro
-  static const darkPrimaryText = Color(0xFFE0E0E0); // Texto principal claro
+  static const darkPrimaryText = Color(0xffffffff); // Texto principal claro
   static const darkSecondaryText = Color(0xFFB0BEC5); // Texto secundario claro
   static const darkBorder = Color(0xFF37474F); // Color del borde en modo oscuro
   static const darkLink = Color(0xFF82B1FF); // Color de enlaces en modo oscuro
