@@ -9,6 +9,7 @@ import 'package:quickcar_aplication/common/widgets/basic_app_select_theme.dart';
 import 'package:quickcar_aplication/common/widgets/buttom/basic_app_buttom.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
+import 'package:quickcar_aplication/presentation/auth/pages/sign_up_or_sign_in.dart';
 import 'package:quickcar_aplication/presentation/choice_mode/bloc/theme_cubit.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';
 class ChoiceMode extends StatelessWidget {
@@ -74,7 +75,7 @@ class ChoiceMode extends StatelessWidget {
                             // Botón para activar el modo oscuro
                             BasicAppSelectTheme(
                               initialCircleColor: isDarkMode
-                                  ? const Color.fromARGB(255, 255, 97, 6)
+                                  ? const Color.fromARGB(255, 2, 255, 188)
                                   : const Color.fromARGB(255, 76, 76, 76),
                               initialIcon: SvgPicture.asset(AppVectors.moon),
                               labelText: 'Oscuro',
@@ -90,7 +91,7 @@ class ChoiceMode extends StatelessWidget {
                             BasicAppSelectTheme(
                               initialCircleColor: isDarkMode
                                   ? const Color.fromARGB(255, 76, 76, 76)
-                                  : const Color.fromARGB(255, 255, 97, 6),
+                                  : const Color.fromARGB(255, 2, 255, 188),
                               initialIcon: SvgPicture.asset(AppVectors.sun),
                               labelText: 'Claro',
                               initialBorderColor: Colors.white,
@@ -113,7 +114,7 @@ class ChoiceMode extends StatelessWidget {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => ChoiceMode(),
+                                  builder: (BuildContext context) => SignUpOrSignIn(),
                                 ),
                               );
                             },

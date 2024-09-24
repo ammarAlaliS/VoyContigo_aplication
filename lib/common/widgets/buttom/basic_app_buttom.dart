@@ -19,8 +19,6 @@ class BasicAppButton extends StatefulWidget {
 class _BasicAppButtonState extends State<BasicAppButton> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textColor = theme.textTheme.bodyLarge?.color ?? Colors.white;
 
     return ElevatedButton(
       onPressed: widget.onPressed,
@@ -29,7 +27,7 @@ class _BasicAppButtonState extends State<BasicAppButton> {
       ),
       child: Text(
         widget.title,
-        style: TextStyle(color: textColor),
+        style: const TextStyle(color: Colors.black),
       ),
     );
   }

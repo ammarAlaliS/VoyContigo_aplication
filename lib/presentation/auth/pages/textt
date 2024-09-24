@@ -1,0 +1,226 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:quickcar_aplication/common/widgets/buttom/basic_app_buttom.dart';
+import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
+import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
+import 'package:quickcar_aplication/presentation/widgets/logo.dart';
+
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
+
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+  String _email = '';
+  String _password = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scaffoldBg = theme.scaffoldBackgroundColor;
+    final light = theme.textTheme.bodyLarge?.color ?? Colors.black;
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: scaffoldBg,
+        body: Stack(
+          children: [
+            SvgPicture.asset(
+              AppVectors.texture,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: isDarkMode
+                  ? const Color.fromARGB(255, 14, 14, 14)
+                  : const Color.fromARGB(255, 5, 25, 154),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: SvgPicture.asset(
+                AppVectors.topPattern,
+                color: isDarkMode
+                    ? Colors.cyan
+                    : const Color.fromARGB(255, 4, 4, 4),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: SvgPicture.asset(
+                AppVectors.buttomPattern,
+                color: isDarkMode
+                    ? Colors.cyan
+                    : const Color.fromARGB(255, 4, 4, 4),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Image.asset(
+                AppImages.transportImgSingIn,
+                width: 250,
+              ),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Logo(),
+                  SizedBox(height: 20),
+                  Text(
+                    'INICIA SESION Y COMIENZA A CREAR EXPERIENCIAS UNICAS',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w600,
+                      color: light,
+                      height: 1.2,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        // Campo de correo electrónico
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9999),
+                            border: Border.all(
+                              color: isDarkMode
+                                  ? Colors.white.withOpacity(0.4)
+                                  : Colors.black.withOpacity(0.2),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 14),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  AppVectors.mail,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: 'Correo electrónico',
+                                      hintStyle: TextStyle(
+                                        color: isDarkMode
+                                            ? Colors.white.withOpacity(0.4)
+                                            : Colors.black.withOpacity(0.4),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Por favor, ingrese su correo electrónico';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      _email = value ?? '';
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+
+                        // Campo de contraseña
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9999),
+                            border: Border.all(
+                              color: isDarkMode
+                                  ? Colors.white.withOpacity(0.4)
+                                  : Colors.black.withOpacity(0.2),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 14),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  AppVectors.lock,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      hintText: 'Contraseña',
+                                      hintStyle: TextStyle(
+                                        color: isDarkMode
+                                            ? Colors.white.withOpacity(0.4)
+                                            : Colors.black.withOpacity(0.4),
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                    style: TextStyle(
+                                      color: isDarkMode ? Colors.white : Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Por favor, ingrese su contraseña';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (value) {
+                                      _password = value ?? '';
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 14),
+                          child: BasicAppButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                // Aquí puedes usar el email y la contraseña guardados
+                                print('Email ingresado: $_email');
+                                print('Contraseña ingresada: $_password');
+                              }
+                            },
+                            title: 'Iniciar sesión',
+                            height: 45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

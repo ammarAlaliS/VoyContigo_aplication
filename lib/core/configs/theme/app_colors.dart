@@ -13,7 +13,7 @@ class AppColors {
   static const text = Color(0xFF151515); // Texto general
 
   // Colores para el modo oscuro
-  static const darkPrimary = Color(0xFF0D9EFF); // Azul principal oscuro
+  static const darkPrimary = Color(0xFF02EAFF); // Azul principal oscuro
   static const darkSecondary = Color(0xFF26A69A); // Verde secundario oscuro
   static const darkAccent = Color.fromARGB(255, 253, 20, 3); // Rojo acento en modo oscuro
   static const darkBackground = Color.fromARGB(255, 0, 0, 0); // Fondo negro
