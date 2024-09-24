@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "71992714639",
+    "project_id": "quickarapp",
+    "storage_bucket": "quickarapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71992714639:android:0b8db74f528b3defbc17fa",
+        "android_client_info": {
+          "package_name": "com.obbarahouse.quickcarapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqU2BbpvW32GaWvr2co4-CBHvPFOSzgVk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "quickarapp",
+          "appId": "1:71992714639:android:0b8db74f528b3defbc17fa",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "quickarapp",
+          "configurations": {
+            "android": "1:71992714639:android:0b8db74f528b3defbc17fa",
+            "ios": "1:71992714639:ios:383e81e6b8b48ec5bc17fa",
+            "macos": "1:71992714639:ios:383e81e6b8b48ec5bc17fa",
+            "web": "1:71992714639:web:d4466333ce3bea03bc17fa",
+            "windows": "1:71992714639:web:7e1b1660a9bc0cc0bc17fa"
+          }
+        }
+      }
+    }
+  }
+}

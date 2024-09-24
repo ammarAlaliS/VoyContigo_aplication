@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quickcar_aplication/common/widgets/appbar/app_bar_buttom.dart';
 import 'package:quickcar_aplication/common/widgets/buttom/basic_app_buttom.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
@@ -34,6 +35,7 @@ class SignUpOrSignIn extends StatelessWidget {
                   ? const Color.fromARGB(255, 14, 14, 14)
                   : const Color.fromARGB(255, 243, 243, 243),
             ),
+            AppBarButtom(),
             Align(
               alignment: Alignment.topRight,
               child: SvgPicture.asset(
@@ -84,7 +86,8 @@ class SignUpOrSignIn extends StatelessWidget {
                                 color: isDarkMode
                                     ? Color(
                                         0xFF02EAFF) // Color para modo oscuro
-                                    : const Color.fromARGB(255, 24, 24, 35), // Color para modo claro
+                                    : const Color.fromARGB(255, 24, 24,
+                                        35), // Color para modo claro
                               ),
                             ),
                           ),
@@ -117,7 +120,7 @@ class SignUpOrSignIn extends StatelessWidget {
                           Expanded(
                             child: BasicAppButton(
                               onPressed: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
@@ -133,7 +136,7 @@ class SignUpOrSignIn extends StatelessWidget {
                           Expanded(
                             child: BasicAppButton(
                               onPressed: () {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>

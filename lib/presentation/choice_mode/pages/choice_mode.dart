@@ -111,7 +111,7 @@ class ChoiceMode extends StatelessWidget {
                           child: BasicAppButton(
                             onPressed: () {
                               // Acción al presionar el botón de continuar
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) => SignUpOrSignIn(),
