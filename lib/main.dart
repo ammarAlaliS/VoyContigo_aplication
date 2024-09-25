@@ -10,6 +10,7 @@ import 'package:quickcar_aplication/core/configs/theme/app_theme.dart';
 import 'package:quickcar_aplication/firebase_options.dart';
 import 'package:quickcar_aplication/presentation/choice_mode/bloc/theme_cubit.dart';
 import 'package:quickcar_aplication/presentation/pages/splash.dart';
+import 'package:quickcar_aplication/service_locator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+  
+  await initializeDependencies();
   runApp(MyApp());
 }
 

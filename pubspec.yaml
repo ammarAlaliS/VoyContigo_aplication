@@ -18,6 +18,14 @@ dependencies:
   firebase_core: ^3.5.0
   firebase_auth: ^5.3.0
   get_it: ^8.0.0
+  dartz:
+  collection: ^1.18.0               # Mantener en 1.18.0, el SDK lo tiene
+  http_parser: ^4.0.2               # Mantener en 4.0.2, el SDK lo tiene
+  leak_tracker: ^10.0.5              # Mantener en 10.0.5, el SDK lo tiene
+  leak_tracker_flutter_testing: ^3.0.5 # Mantener en 3.0.5, el SDK lo tiene
+  material_color_utilities: ^0.11.1  # Mantener en 0.11.1, el SDK lo tiene
+  meta: ^1.15.0                      # Mantener en 1.15.0, el SDK lo tiene
+  string_scanner: ^1.2.0             # Mantener en 1.2.0, el SDK lo tiene
 
 dev_dependencies:
   flutter_test:

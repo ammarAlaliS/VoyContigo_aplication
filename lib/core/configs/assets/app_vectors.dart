@@ -11,6 +11,7 @@ class AppVectors {
 
   // icons 
 
- static const String mail = '${basePath}mail$format';
+  static const String mail = '${basePath}mail$format';
   static const String lock = '${basePath}lock$format';
+  static const String user = '${basePath}user$format';
 }

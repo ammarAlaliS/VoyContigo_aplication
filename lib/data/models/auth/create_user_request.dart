@@ -1,8 +1,9 @@
 class CreateUserRequest {
-  final String fullName;
+  final String name;
+  final String lastName;
   final String email;
   final String password;
 
-  CreateUserRequest(
-      {required this.fullName, required this.email, required this.password});
+  CreateUserRequest({required this.name, required this.lastName, required this.email, required this.password});
+
 }
