@@ -3,6 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
+import 'package:quickcar_aplication/data/models/auth/sign_in_user_request.dart';
+import 'package:quickcar_aplication/domain/usecases/auth/Singin.dart';
+import 'package:quickcar_aplication/presentation/root/pages/root.dart';
+import 'package:quickcar_aplication/service_locator.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -17,7 +21,7 @@ class _SignInFormState extends State<SignInForm> {
   String _password = '';
   String? _emailError;
   String? _passwordError;
-  bool isDarkMode = false; // Cambia esto según tu lógica de tema
+  bool isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +182,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
             
@@ -195,8 +199,43 @@ class _SignInFormState extends State<SignInForm> {
                   }
             
                   if (_emailError == null && _passwordError == null) {
-                    print('Email ingresado: $_email');
-                    print('Contraseña ingresada: $_password');
+                    var result = await sl<SingInUseCase>().call(
+                        params: CreateSignInUserRequest(
+                            email: _email,
+                            password: _password));
+
+                    result.fold(
+                      (l) {
+                        var snackbar = SnackBar(
+                          content: Text(
+                            l,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor:Colors.red, 
+                          duration:Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: 'Cerrar',
+                            textColor:Colors.white, 
+                            onPressed: () {
+                           
+                            },
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      },
+                      (r) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RootPage()),
+                          (route) => false,
+                        );
+                      },
+                    );
                   }
                 }
               },

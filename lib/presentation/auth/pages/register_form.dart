@@ -46,7 +46,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                       padding: const EdgeInsets.only(left: 10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Column(
                           children: [
                             Container(
@@ -518,17 +518,17 @@ class _RegisterFormState extends State<RegisterForm> {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  if (_nombre.isEmpty){
+                  if (_nombre.isEmpty) {
                     setState(() {
                       _nombreError = 'Su nombre es requerido';
                     });
                   }
-                  if (_apellido.isEmpty){
+                  if (_apellido.isEmpty) {
                     setState(() {
                       _apellidoError = 'Su apellido es requerido';
                     });
                   }
-                  // Validar manualmente
+
                   if (_email.isEmpty) {
                     setState(() {
                       _emailError = 'Por favor, ingrese su correo electrónico';
@@ -540,29 +540,49 @@ class _RegisterFormState extends State<RegisterForm> {
                     });
                   }
 
-                  if (_emailError == null && _passwordError == null && _nombreError == null && _apellidoError == null) {
+                  if (_emailError == null &&
+                      _passwordError == null &&
+                      _nombreError == null &&
+                      _apellidoError == null) {
                     var result = await sl<SignupUseCase>().call(
                         params: CreateUserRequest(
-                          name: _nombre, 
-                          lastName: _apellido, 
-                          email: _email, 
-                          password: _password)
-                      );
+                            name: _nombre,
+                            lastName: _apellido,
+                            email: _email,
+                            password: _password));
 
-                      result.fold(
-                        (l){
-                          var snackbar = SnackBar(content: Text(l));
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        }
-                        , 
-                        (r){
-                          Navigator.pushAndRemoveUntil(
-                            context, 
-                            MaterialPageRoute(builder: (BuildContext context)=> const RootPage()),
-                            (route) => false
-                          );
-                        }
+                    result.fold(
+                      (l) {
+                        var snackbar = SnackBar(
+                          content: Text(
+                            l,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor:Colors.red, 
+                          duration:Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: 'Cerrar',
+                            textColor:Colors.white, 
+                            onPressed: () {
+                           
+                            },
+                          ),
                         );
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                      },
+                      (r) {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RootPage()),
+                          (route) => false,
+                        );
+                      },
+                    );
                   }
                 }
               },

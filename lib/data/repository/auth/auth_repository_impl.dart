@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:quickcar_aplication/data/models/auth/create_user_request.dart';
+import 'package:quickcar_aplication/data/models/auth/sign_in_user_request.dart';
 import 'package:quickcar_aplication/data/sources/auth/auth_firebase_service.dart';
 import 'package:quickcar_aplication/domain/repository/auth/auth.dart';
 import 'package:quickcar_aplication/service_locator.dart';
@@ -11,8 +12,8 @@ class AuthRepositoryImpl extends AuhtRepository {
   }
 
   @override
-  Future<void> singin() {
-    throw UnimplementedError();
+  Future<Either> singin(CreateSignInUserRequest createSignInUserRequest) async{
+    return await sl<AuthFirebaseService>().singin(createSignInUserRequest);
   }
 
 }
