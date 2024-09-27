@@ -26,7 +26,7 @@ dependencies:
   material_color_utilities: ^0.11.1  # Mantener en 0.11.1, el SDK lo tiene
   meta: ^1.15.0                      # Mantener en 1.15.0, el SDK lo tiene
   string_scanner: ^1.2.0             # Mantener en 1.2.0, el SDK lo tiene
-
+  font_awesome_flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter

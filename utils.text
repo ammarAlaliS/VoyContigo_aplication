@@ -1,3 +1,30 @@
 adb kill-server
 adb tcpip 5555
 adb connect 10.0.0.35
+
+
+¿Qué es la Inyección de Dependencias?
+La inyección de dependencias es un patrón de diseño que permite a los 
+objetos recibir sus dependencias desde el exterior, en lugar de crearlas 
+ellos mismos. Esto tiene varias ventajas, entre ellas:
+
+para que sirve 
+
+Desacoplamiento: Permite que las clases estén menos acopladas entre sí, 
+facilitando la prueba y el mantenimiento.
+
+Pruebas Unitarias: Facilita la escritura de pruebas unitarias porque puedes inyectar versiones simuladas 
+(mock) de tus dependencias.
+
+Gestión de Ciclos de Vida: Controla la creación y destrucción de instancias de manera más eficiente.
+
+GetIt: Es un paquete que permite implementar la inyección de dependencias de manera sencilla y efectiva 
+en aplicaciones Dart y Flutter. 
+Proporciona una forma de registrar y acceder a instancias de objetos.
+
+El objetivo principal de este patrón es permitir que diferentes partes de tu aplicación se 
+comuniquen entre sí de manera flexible y desacoplada. Con esta configuración, cada vez que 
+necesites un servicio, repositorio o caso de uso en tu aplicación, solo necesitas usar sl<T>()
+para obtener la instancia correspondiente.
+
+la capa de domain repositorio es donde creamos los contratos para que puedan ser implementados 

@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:quickcar_aplication/common/widgets/basic_app_select_theme.dart';
@@ -12,6 +13,7 @@ import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/sign_up_or_sign_in.dart';
 import 'package:quickcar_aplication/presentation/choice_mode/bloc/theme_cubit.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';
+
 class ChoiceMode extends StatelessWidget {
   const ChoiceMode({super.key});
 
@@ -19,6 +21,16 @@ class ChoiceMode extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor:
+          isDarkMode ? const Color.fromARGB(255, 0, 0, 0) : Color(0xFFF9F9F9),
+      statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+      systemNavigationBarColor:
+          isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+      systemNavigationBarIconBrightness:
+          isDarkMode ? Brightness.light : Brightness.dark,
+    ));
 
     return SafeArea(
       child: Scaffold(
@@ -83,7 +95,9 @@ class ChoiceMode extends StatelessWidget {
                               textColor: Colors.grey,
                               onTap: () {
                                 // Cambiar siempre al modo oscuro cuando se presione
-                                context.read<ThemeCubit>().updateTheme(ThemeMode.dark);
+                                context
+                                    .read<ThemeCubit>()
+                                    .updateTheme(ThemeMode.dark);
                               },
                             ),
                             const SizedBox(width: 40),
@@ -98,7 +112,9 @@ class ChoiceMode extends StatelessWidget {
                               textColor: Colors.grey,
                               onTap: () {
                                 // Cambiar siempre al modo claro cuando se presione
-                                context.read<ThemeCubit>().updateTheme(ThemeMode.light);
+                                context
+                                    .read<ThemeCubit>()
+                                    .updateTheme(ThemeMode.light);
                               },
                             ),
                           ],
@@ -107,14 +123,16 @@ class ChoiceMode extends StatelessWidget {
                           height: 40,
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 0, horizontal: 20),
                           child: BasicAppButton(
                             onPressed: () {
                               // Acción al presionar el botón de continuar
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) => SignUpOrSignIn(),
+                                  builder: (BuildContext context) =>
+                                      SignUpOrSignIn(),
                                 ),
                               );
                             },
@@ -134,4 +152,3 @@ class ChoiceMode extends StatelessWidget {
     );
   }
 }
-

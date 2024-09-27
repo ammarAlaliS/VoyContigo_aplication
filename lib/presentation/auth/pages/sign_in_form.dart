@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/data/models/auth/sign_in_user_request.dart';
 import 'package:quickcar_aplication/domain/usecases/auth/Singin.dart';
+import 'package:quickcar_aplication/presentation/auth/pages/register_page.dart';
 import 'package:quickcar_aplication/presentation/root/pages/root.dart';
 import 'package:quickcar_aplication/service_locator.dart';
 
@@ -22,6 +23,7 @@ class _SignInFormState extends State<SignInForm> {
   String? _emailError;
   String? _passwordError;
   bool isDarkMode = false;
+   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +32,10 @@ class _SignInFormState extends State<SignInForm> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 0,
-          horizontal: 15
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
         child: Column(
           children: [
+            SizedBox(height: 20),
             // Campo de correo electrónico
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -48,7 +48,7 @@ class _SignInFormState extends State<SignInForm> {
                           ? const Color.fromARGB(255, 255, 255, 255)
                               .withOpacity(0.3)
                           : const Color.fromARGB(255, 5, 5, 5)
-                              .withOpacity(0.3), // Cambiado a negro
+                              .withOpacity(0.3),
                       width: 1.0,
                     ),
                     color: isDarkMode
@@ -97,7 +97,9 @@ class _SignInFormState extends State<SignInForm> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 if (_emailError != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -108,10 +110,10 @@ class _SignInFormState extends State<SignInForm> {
                   ),
               ],
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 5),
             // Campo de contraseña
             Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -120,8 +122,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: isDarkMode
                           ? const Color.fromARGB(255, 255, 255, 255)
                               .withOpacity(0.3)
-                          : const Color.fromARGB(255, 5, 5, 5)
-                              .withOpacity(0.3), // Cambiado a negro
+                          : const Color.fromARGB(255, 5, 5, 5).withOpacity(0.3),
                       width: 1.0,
                     ),
                     color: isDarkMode
@@ -140,7 +141,7 @@ class _SignInFormState extends State<SignInForm> {
                         SizedBox(width: 10),
                         Expanded(
                           child: TextFormField(
-                            obscureText: true,
+                            obscureText: _obscureText, 
                             decoration: InputDecoration(
                               hintText: 'Contraseña',
                               hintStyle: TextStyle(
@@ -149,6 +150,17 @@ class _SignInFormState extends State<SignInForm> {
                                     : Colors.black.withOpacity(0.4),
                               ),
                               border: InputBorder.none,
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                child: Icon(
+                                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                                  color: isDarkMode ? Colors.white : Colors.black,
+                                ),
+                              ),
                             ),
                             style: TextStyle(
                               color: isDarkMode ? Colors.white : Colors.black,
@@ -156,6 +168,7 @@ class _SignInFormState extends State<SignInForm> {
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.start,
+                            textAlignVertical: TextAlignVertical.center,
                             onChanged: (value) {
                               setState(() {
                                 _password = value;
@@ -168,8 +181,9 @@ class _SignInFormState extends State<SignInForm> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
-                // Mostrar mensaje de error de contraseña fuera del contenedor
+                SizedBox(
+                  height: 10,
+                ),
                 if (_passwordError != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -181,11 +195,106 @@ class _SignInFormState extends State<SignInForm> {
               ],
             ),
             SizedBox(height: 20),
+            Row(
+              crossAxisAlignment:
+                  CrossAxisAlignment.end, 
+              textBaseline: TextBaseline
+                  .alphabetic, 
+              children: [
+                SvgPicture.asset(
+                  color: Colors.cyan,
+                  AppVectors.checkUser,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.baseline, 
+                  textBaseline: TextBaseline
+                      .alphabetic, 
+                  children: [
+                    Text(
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black),
+                      "¿Aún no tienes cuenta en QuickCar?",
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const RegisterPage()),
+                        );
+                      },
+                      child: Text(
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.cyan : Colors.cyan[600]),
+                        "Regístrate",
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              crossAxisAlignment:
+                  CrossAxisAlignment.end,
+              textBaseline:
+                  TextBaseline.alphabetic,
+              children: [
+                SvgPicture.asset(
+                  color: Colors.red,
+                  AppVectors.forgotPassword,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.baseline, 
+                  textBaseline: TextBaseline
+                      .alphabetic,
+                  children: [
+                    Text(
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black),
+                      "¿Has olvidado tu contraseña?",
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Text(
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red[600]),
+                        "Recupérala",
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            SizedBox(height: 30),
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-            
+
                   // Validar manualmente
                   if (_email.isEmpty) {
                     setState(() {
@@ -197,36 +306,53 @@ class _SignInFormState extends State<SignInForm> {
                       _passwordError = 'Por favor, ingrese su contraseña';
                     });
                   }
-            
+
                   if (_emailError == null && _passwordError == null) {
-                    var result = await sl<SingInUseCase>().call(
-                        params: CreateSignInUserRequest(
-                            email: _email,
-                            password: _password));
+                    var result = await sl<SignInUseCase>().call(
+                      params: CreateSignInUserRequest(
+                          email: _email, password: _password),
+                    );
 
                     result.fold(
                       (l) {
+                        String errorMessage = l.toString();
                         var snackbar = SnackBar(
                           content: Text(
-                            l,
+                            errorMessage,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          backgroundColor:Colors.red, 
-                          duration:Duration(seconds: 3),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 3),
                           action: SnackBarAction(
                             label: 'Cerrar',
-                            textColor:Colors.white, 
-                            onPressed: () {
-                           
-                            },
+                            textColor: Colors.white,
+                            onPressed: () {},
                           ),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                       },
                       (r) {
+                        var snackbar = SnackBar(
+                          content: Text(
+                            r,
+                            style: TextStyle(
+                              color: const Color.fromARGB(255, 241, 241, 241),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 3),
+                          action: SnackBarAction(
+                            label: 'Cerrar',
+                            textColor: Colors.white,
+                            onPressed: () {},
+                          ),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
+
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
@@ -239,14 +365,12 @@ class _SignInFormState extends State<SignInForm> {
                   }
                 }
               },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 45),
+              ),
               child: const Text(
                 'Iniciar sesión',
-                style: TextStyle(
-                    color: Colors.black), // Cambiar el color del texto aquí
-              ),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity,
-                    45), // Hacer que el botón ocupe todo el ancho
+                style: TextStyle(color: Colors.black),
               ),
             ),
           ],

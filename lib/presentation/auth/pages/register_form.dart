@@ -544,7 +544,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       _passwordError == null &&
                       _nombreError == null &&
                       _apellidoError == null) {
-                    var result = await sl<SignupUseCase>().call(
+                    var result = await sl<SignUpUseCase>().call(
                         params: CreateUserRequest(
                             name: _nombre,
                             lastName: _apellido,

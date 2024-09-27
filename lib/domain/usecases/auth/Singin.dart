@@ -4,10 +4,9 @@ import 'package:quickcar_aplication/data/models/auth/sign_in_user_request.dart';
 import 'package:quickcar_aplication/domain/repository/auth/auth.dart';
 import 'package:quickcar_aplication/service_locator.dart';
 
-class SingInUseCase implements Usecase<Either,CreateSignInUserRequest>{
+class SignInUseCase implements Usecase<Either<Exception, String>, CreateSignInUserRequest> {
   @override
-  Future<Either> call({CreateSignInUserRequest ?  params}) async{
-     return await sl<AuhtRepository>().singin(params!);
+  Future<Either<Exception, String>> call({CreateSignInUserRequest? params}) async {
+    return await sl<AuthRepository>().signin(params!);
   }
-  
 }
