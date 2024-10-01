@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quickcar_aplication/data/models/auth/create_user_request.dart';
 import 'package:quickcar_aplication/data/models/auth/sign_in_user_request.dart';
 
 abstract class AuthFirebaseService {
   Future<Either<Exception, String>> signup(CreateUserRequest createUserRequest);
-  Future<Either<Exception, String>> signin(
-      CreateSignInUserRequest createSignInUserRequest);
-  Future<Either<Exception, void>> signout(); // Añadir también signout
+  Future<Either<Exception, String>> signin(CreateSignInUserRequest createSignInUserRequest);
+  Future<Either<Exception, void>> signout(); 
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
@@ -16,9 +16,28 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   Future<Either<Exception, String>> signup(
       CreateUserRequest createUserRequest) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: createUserRequest.email, 
-          password: createUserRequest.password);
+      // Crear usuario en Firebase Auth
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: createUserRequest.email,
+        password: createUserRequest.password,
+      );
+
+      // Obtener la referencia a Firestore
+      final firestore = FirebaseFirestore.instance;
+
+      // Crear un documento para el nuevo usuario en la colección 'users'
+      await firestore.collection('users').doc(userCredential.user!.uid).set({
+        'firstName': createUserRequest.name,
+        'lastName': createUserRequest.lastName,
+        'email': createUserRequest.email,
+        'profileImgUrl': createUserRequest.profileImgUrl,
+        'presentationImgUrl': createUserRequest.presentationImgUrl,
+        'userDescription': createUserRequest.userDescription,
+        'role': createUserRequest.role,
+        'isActive': true,
+        'isVerified': false,
+      });
+
       return const Right("El registro fue exitoso");
     } on FirebaseAuthException catch (e) {
       String message = '';
@@ -27,7 +46,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       } else if (e.code == 'email-already-in-use') {
         message = 'El correo electrónico ya está en uso.';
       }
-      return Left(Exception(message)); 
+      return Left(Exception(message));
+    } catch (error) {
+      return Left(Exception("Error inesperado: $error"));
     }
   }
 
@@ -59,10 +80,9 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
           message = 'El usuario ha sido deshabilitado.';
           break;
         default:
-          message =
-              'Ha ocurrido un error inesperado. Intenta de nuevo más tarde.';
+          message = 'Ha ocurrido un error inesperado. Intenta de nuevo más tarde.';
       }
-      return Left(Exception(message)); 
+      return Left(Exception(message));
     }
   }
 
@@ -73,7 +93,7 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       await FirebaseAuth.instance.signOut();
       return const Right(null);
     } catch (e) {
-      return Left(Exception("Error al cerrar sesión"));
+      return Left(Exception("Error al cerrar sesión: $e"));
     }
   }
 }

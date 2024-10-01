@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quickcar_aplication/common/widgets/appbar/app_bar_buttom.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/register_form.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';

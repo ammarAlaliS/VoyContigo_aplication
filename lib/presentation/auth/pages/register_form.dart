@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
-import 'package:quickcar_aplication/data/models/auth/create_user_request.dart';
-import 'package:quickcar_aplication/domain/usecases/auth/Signup.dart';
-import 'package:quickcar_aplication/presentation/root/pages/root.dart';
-import 'package:quickcar_aplication/service_locator.dart';
+import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
+import 'package:quickcar_aplication/presentation/auth/pages/register_form_select_images.dart';
+
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -32,6 +32,8 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     isDarkMode = theme.brightness == Brightness.dark;
+
+    final userCubit = context.read<UserCubit>();
 
     return Form(
       key: _formKey,
@@ -136,6 +138,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                             _nombre = value;
                                             _nombreError = null;
                                           });
+                                         userCubit.updateFirstName(_nombre);
                                         },
                                       ),
                                     ),
@@ -254,6 +257,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                             _apellido = value;
                                             _apellidoError = null;
                                           });
+                                          userCubit.updateLastName(_apellido);
                                         },
                                       ),
                                     ),
@@ -372,6 +376,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                       _email = value;
                                       _emailError = null;
                                     });
+                                    userCubit.updateEmail(_email);
                                   },
                                 ),
                               ),
@@ -490,6 +495,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                       _password = value;
                                       _passwordError = null;
                                     });
+                                     userCubit.updatePassword(_password);
                                   },
                                 ),
                               ),
@@ -501,7 +507,6 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                 ),
                 SizedBox(height: 10),
-                // Mostrar mensaje de error de contraseña fuera del contenedor
                 if (_passwordError != null)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -544,50 +549,17 @@ class _RegisterFormState extends State<RegisterForm> {
                       _passwordError == null &&
                       _nombreError == null &&
                       _apellidoError == null) {
-                    var result = await sl<SignUpUseCase>().call(
-                        params: CreateUserRequest(
-                            name: _nombre,
-                            lastName: _apellido,
-                            email: _email,
-                            password: _password));
-
-                    result.fold(
-                      (l) {
-                        var snackbar = SnackBar(
-                          content: Text(
-                            l,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          backgroundColor:Colors.red, 
-                          duration:Duration(seconds: 3),
-                          action: SnackBarAction(
-                            label: 'Cerrar',
-                            textColor:Colors.white, 
-                            onPressed: () {
-                           
-                            },
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      },
-                      (r) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const RootPage()),
-                          (route) => false,
-                        );
-                      },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const ProfileWithCover()),
                     );
                   }
                 }
               },
               child: const Text(
-                'Crear cuenta',
+                'Continuar',
                 style: TextStyle(
                   color: Colors.black,
                 ),

@@ -8,6 +8,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quickcar_aplication/core/configs/theme/app_theme.dart';
 import 'package:quickcar_aplication/firebase_options.dart';
+import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
 import 'package:quickcar_aplication/presentation/choice_mode/bloc/theme_cubit.dart';
 import 'package:quickcar_aplication/presentation/pages/splash.dart';
 import 'package:quickcar_aplication/service_locator.dart';
@@ -20,10 +21,11 @@ Future<void> main() async {
         ? HydratedStorage.webStorageDirectory
         : await getApplicationDocumentsDirectory(),
   );
+
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   await initializeDependencies();
   runApp(MyApp());
 }
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => UserCubit()), 
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) => MaterialApp(
