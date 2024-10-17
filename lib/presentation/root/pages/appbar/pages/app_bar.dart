@@ -210,7 +210,7 @@ class _AppBarPageState extends State<AppBarPage> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: isDarkMode ? Color.fromARGB(255, 40, 40, 40) : Colors.white,
+          color: isDarkMode ?Color.fromARGB(255, 5, 14, 26) : Colors.white,
           border: Border.all(
             color: theme.dividerColor.withOpacity(0.1),
             width: 1,

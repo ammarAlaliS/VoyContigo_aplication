@@ -1,3 +1,5 @@
+import 'package:quickcar_aplication/data/models/auth/user_role.dart';
+
 class CreateUserRequest {
   final String name;
   final String lastName;
@@ -6,7 +8,7 @@ class CreateUserRequest {
   final String profileImgUrl; 
   final String presentationImgUrl; 
   final String userDescription;
-  final String role; 
+  final UserRole role; 
 
   CreateUserRequest({
     required this.name,
@@ -16,6 +18,6 @@ class CreateUserRequest {
     this.profileImgUrl = '', 
     this.presentationImgUrl = '',
     this.userDescription = '',
-    this.role = 'user',
+    this.role = UserRole.usuario,
   });
 }

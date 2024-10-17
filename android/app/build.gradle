@@ -10,8 +10,7 @@ plugins {
 
 android {
     namespace 'com.obbarahouse.quickcarapplication'
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 33 
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,22 +22,16 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-       applicationId "com.obbarahouse.quickcarapplication" 
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-        minSdkVersion 23               
-
+        applicationId "com.obbarahouse.quickcarapplication"
+        minSdkVersion 23 
+        compileSdk = 34 
+        targetSdk = 33
+        versionCode flutter.versionCode
+        versionName flutter.versionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
         }
     }

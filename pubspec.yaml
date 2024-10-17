@@ -19,18 +19,18 @@ dependencies:
   firebase_auth: ^5.3.0
   get_it: ^8.0.0
   dartz:
-  collection: ^1.18.0               # Mantener en 1.18.0, el SDK lo tiene
-  http_parser: ^4.0.2               # Mantener en 4.0.2, el SDK lo tiene
-  leak_tracker: ^10.0.5              # Mantener en 10.0.5, el SDK lo tiene
-  leak_tracker_flutter_testing: ^3.0.5 # Mantener en 3.0.5, el SDK lo tiene
-  material_color_utilities: ^0.11.1  # Mantener en 0.11.1, el SDK lo tiene
-  meta: ^1.15.0                      # Mantener en 1.15.0, el SDK lo tiene
-  string_scanner: ^1.2.0             # Mantener en 1.2.0, el SDK lo tiene
-  image_picker: ^1.1.2
+  collection: ^1.18.0               
+  http_parser: ^4.0.2               
+  leak_tracker: ^10.0.5             
+  leak_tracker_flutter_testing: ^3.0.5 
+  material_color_utilities: ^0.11.1 
+  meta: ^1.15.0                     
+  string_scanner: ^1.2.0        
   font_awesome_flutter: ^10.7.0
   cloud_firestore: ^5.4.3
   firebase_storage: ^12.3.2
   permission_handler: ^11.3.1
+  image_picker: ^1.1.2
   
 dev_dependencies:
   flutter_test:

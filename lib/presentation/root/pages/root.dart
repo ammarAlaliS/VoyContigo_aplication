@@ -19,7 +19,6 @@ class RootPage extends StatefulWidget {
   @override
   State<RootPage> createState() => _RootPageState();
 }
-
 class _RootPageState extends State<RootPage> {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
@@ -30,9 +29,9 @@ class _RootPageState extends State<RootPage> {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: isDarkMode ? const Color.fromARGB(255, 0, 0, 0) : Color(0xFFF9F9F9),
+      statusBarColor: isDarkMode ? Color.fromARGB(255, 5, 14, 26) : Color(0xFFF9F9F9),
       statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: isDarkMode ? const  Color.fromARGB(255, 40, 40, 40) : Colors.white,
+      systemNavigationBarColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.white,
       systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
     ));
 

@@ -5,8 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
+import 'package:quickcar_aplication/presentation/auth/pages/registerComponents/register_create_user_logic_buttom.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/register_form_select_images.dart';
-
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -138,7 +138,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                             _nombre = value;
                                             _nombreError = null;
                                           });
-                                         userCubit.updateFirstName(_nombre);
+                                          userCubit.updateFirstName(_nombre);
                                         },
                                       ),
                                     ),
@@ -495,7 +495,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                       _password = value;
                                       _passwordError = null;
                                     });
-                                     userCubit.updatePassword(_password);
+                                    userCubit.updatePassword(_password);
                                   },
                                 ),
                               ),
@@ -549,6 +549,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       _passwordError == null &&
                       _nombreError == null &&
                       _apellidoError == null) {
+                    await registerUser(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -559,7 +560,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 }
               },
               child: const Text(
-                'Continuar',
+                'Crear cuenta',
                 style: TextStyle(
                   color: Colors.black,
                 ),

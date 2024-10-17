@@ -23,7 +23,65 @@ class _SignInFormState extends State<SignInForm> {
   String? _emailError;
   String? _passwordError;
   bool isDarkMode = false;
-   bool _obscureText = true;
+  bool _obscureText = true;
+
+// Function to display a SnackBar
+  void showCustomSnackBar(
+      BuildContext context, String message, Color backgroundColor) {
+    final snackbar = SnackBar(
+      content: Text(
+        message,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      backgroundColor: backgroundColor,
+      duration: const Duration(seconds: 3),
+      action: SnackBarAction(
+        label: 'Cerrar',
+        textColor: Colors.white,
+        onPressed: () {}, // You could close the SnackBar here if needed
+      ),
+    );
+
+    // Show the SnackBar
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+
+// Function to handle sign-in logic
+  Future<void> handleSignIn(BuildContext context) async {
+    // Check for errors in email and password
+    if (_emailError == null && _passwordError == null) {
+      // Optionally, show a loading indicator
+
+      var result = await sl<SignInUseCase>().call(
+        params: CreateSignInUserRequest(
+          email: _email,
+          password: _password,
+        ),
+      );
+
+      result.fold(
+        (error) {
+          String errorMessage = error.toString();
+          showCustomSnackBar(context, errorMessage, Colors.red);
+        },
+        (successMessage) {
+          showCustomSnackBar(context, successMessage, Colors.green);
+
+          // Navigate to RootPage after successful sign-in
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const RootPage(),
+            ),
+            (route) => false,
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +105,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: isDarkMode
                           ? const Color.fromARGB(255, 255, 255, 255)
                               .withOpacity(0.3)
-                          : const Color.fromARGB(255, 5, 5, 5)
-                              .withOpacity(0.3),
+                          : const Color.fromARGB(255, 5, 5, 5).withOpacity(0.3),
                       width: 1.0,
                     ),
                     color: isDarkMode
@@ -141,7 +198,7 @@ class _SignInFormState extends State<SignInForm> {
                         SizedBox(width: 10),
                         Expanded(
                           child: TextFormField(
-                            obscureText: _obscureText, 
+                            obscureText: _obscureText,
                             decoration: InputDecoration(
                               hintText: 'Contraseña',
                               hintStyle: TextStyle(
@@ -157,8 +214,11 @@ class _SignInFormState extends State<SignInForm> {
                                   });
                                 },
                                 child: Icon(
-                                  _obscureText ? Icons.visibility : Icons.visibility_off,
-                                  color: isDarkMode ? Colors.white : Colors.black,
+                                  _obscureText
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black,
                                 ),
                               ),
                             ),
@@ -196,10 +256,8 @@ class _SignInFormState extends State<SignInForm> {
             ),
             SizedBox(height: 20),
             Row(
-              crossAxisAlignment:
-                  CrossAxisAlignment.end, 
-              textBaseline: TextBaseline
-                  .alphabetic, 
+              crossAxisAlignment: CrossAxisAlignment.end,
+              textBaseline: TextBaseline.alphabetic,
               children: [
                 SvgPicture.asset(
                   color: Colors.cyan,
@@ -209,10 +267,8 @@ class _SignInFormState extends State<SignInForm> {
                   width: 5,
                 ),
                 Row(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.baseline, 
-                  textBaseline: TextBaseline
-                      .alphabetic, 
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
                       style: TextStyle(
@@ -247,10 +303,8 @@ class _SignInFormState extends State<SignInForm> {
             ),
             SizedBox(height: 10),
             Row(
-              crossAxisAlignment:
-                  CrossAxisAlignment.end,
-              textBaseline:
-                  TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              textBaseline: TextBaseline.alphabetic,
               children: [
                 SvgPicture.asset(
                   color: Colors.red,
@@ -260,10 +314,8 @@ class _SignInFormState extends State<SignInForm> {
                   width: 5,
                 ),
                 Row(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.baseline, 
-                  textBaseline: TextBaseline
-                      .alphabetic,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
                       style: TextStyle(
@@ -290,79 +342,29 @@ class _SignInFormState extends State<SignInForm> {
               ],
             ),
             SizedBox(height: 30),
+            // ElevatedButton for signing in
             ElevatedButton(
               onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
 
-                  // Validar manualmente
-                  if (_email.isEmpty) {
-                    setState(() {
-                      _emailError = 'Por favor, ingrese su correo electrónico';
-                    });
-                  }
-                  if (_password.isEmpty) {
-                    setState(() {
-                      _passwordError = 'Por favor, ingrese su contraseña';
-                    });
+                  // Manual validation
+                  setState(() {
+                    _emailError = _email.isEmpty
+                        ? 'Por favor, ingrese su correo electrónico'
+                        : null;
+                    _passwordError = _password.isEmpty
+                        ? 'Por favor, ingrese su contraseña'
+                        : null;
+                  });
+
+                  // Return early if there's an error
+                  if (_emailError != null || _passwordError != null) {
+                    return;
                   }
 
-                  if (_emailError == null && _passwordError == null) {
-                    var result = await sl<SignInUseCase>().call(
-                      params: CreateSignInUserRequest(
-                          email: _email, password: _password),
-                    );
-
-                    result.fold(
-                      (l) {
-                        String errorMessage = l.toString();
-                        var snackbar = SnackBar(
-                          content: Text(
-                            errorMessage,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          backgroundColor: Colors.red,
-                          duration: Duration(seconds: 3),
-                          action: SnackBarAction(
-                            label: 'Cerrar',
-                            textColor: Colors.white,
-                            onPressed: () {},
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                      },
-                      (r) {
-                        var snackbar = SnackBar(
-                          content: Text(
-                            r,
-                            style: TextStyle(
-                              color: const Color.fromARGB(255, 241, 241, 241),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          backgroundColor: Colors.green,
-                          duration: Duration(seconds: 3),
-                          action: SnackBarAction(
-                            label: 'Cerrar',
-                            textColor: Colors.white,
-                            onPressed: () {},
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackbar);
-
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const RootPage()),
-                          (route) => false,
-                        );
-                      },
-                    );
-                  }
+                  // Handle sign-in
+                  await handleSignIn(context);
                 }
               },
               style: ElevatedButton.styleFrom(

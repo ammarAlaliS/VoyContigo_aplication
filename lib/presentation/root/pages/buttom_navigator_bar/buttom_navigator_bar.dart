@@ -53,7 +53,7 @@ class _ButtomNavigatorBarPageState extends State<ButtomNavigatorBarPage> {
         },
         items: [
           BottomNavigationBarItem(
-            backgroundColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+            backgroundColor: isDarkMode ? Color.fromARGB(255, 5, 14, 26) : Colors.white,
             icon: SvgPicture.asset(
               AppVectors.home,
               color: widget.currentIndex == 0 ? const Color.fromARGB(255, 6, 143, 255) : Colors.grey, // Color activo o inactivo
@@ -61,7 +61,7 @@ class _ButtomNavigatorBarPageState extends State<ButtomNavigatorBarPage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-           backgroundColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+           backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.white,
             icon: SvgPicture.asset(
               AppVectors.user,
                color: widget.currentIndex == 1 ? const Color.fromARGB(255, 6, 143, 255) : Colors.grey, 
@@ -69,7 +69,7 @@ class _ButtomNavigatorBarPageState extends State<ButtomNavigatorBarPage> {
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-           backgroundColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+           backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.white,
             icon: SvgPicture.asset(
               AppVectors.shop,
                 color: widget.currentIndex == 2 ? const Color.fromARGB(255, 6, 143, 255) : Colors.grey, 
@@ -77,7 +77,7 @@ class _ButtomNavigatorBarPageState extends State<ButtomNavigatorBarPage> {
             label: 'Marketplace',
           ),
           BottomNavigationBarItem(
-            backgroundColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+            backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.white,
             icon: SvgPicture.asset(
               AppVectors.article,
                 color: widget.currentIndex == 3 ? const Color.fromARGB(255, 6, 143, 255) : Colors.grey, 
@@ -85,7 +85,7 @@ class _ButtomNavigatorBarPageState extends State<ButtomNavigatorBarPage> {
             label: 'Blog',
           ),
           BottomNavigationBarItem(
-            backgroundColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
+            backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.white,
             icon: SvgPicture.asset(
               AppVectors.message,
                 color: widget.currentIndex == 4 ? const Color.fromARGB(255, 6, 143, 255) : Colors.grey, 
