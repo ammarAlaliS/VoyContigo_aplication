@@ -7,6 +7,7 @@ import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/registerComponents/register_create_user_logic_buttom.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/register_form_select_images.dart';
+import 'package:quickcar_aplication/presentation/intro/pages/congratulation_message.dart';
 
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
@@ -27,6 +28,7 @@ class _RegisterFormState extends State<RegisterForm> {
   String? _nombreError;
   String? _apellidoError;
   bool isDarkMode = false;
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -469,18 +471,32 @@ class _RegisterFormState extends State<RegisterForm> {
                                     : const Color.fromARGB(255, 255, 255, 255),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 16),
+                                padding: const EdgeInsets.only(left: 16, right: 4),
                                 child: TextFormField(
-                                  obscureText: true,
+                                  obscureText: _obscureText,
                                   decoration: InputDecoration(
-                                    hintText: 'Ingresa tu contraseña',
+                                    hintText: 'Contraseña',
                                     hintStyle: TextStyle(
                                       color: isDarkMode
                                           ? Colors.white.withOpacity(0.4)
                                           : Colors.black.withOpacity(0.4),
                                     ),
                                     border: InputBorder.none,
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _obscureText = !_obscureText;
+                                        });
+                                      },
+                                      child: Icon(
+                                        _obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
                                   ),
                                   style: TextStyle(
                                     color: isDarkMode
@@ -490,12 +506,13 @@ class _RegisterFormState extends State<RegisterForm> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.start,
+                                  textAlignVertical: TextAlignVertical.center,
                                   onChanged: (value) {
                                     setState(() {
                                       _password = value;
                                       _passwordError = null;
                                     });
-                                    userCubit.updatePassword(_password);
+                                     userCubit.updatePassword(_password);
                                   },
                                 ),
                               ),
@@ -533,7 +550,6 @@ class _RegisterFormState extends State<RegisterForm> {
                       _apellidoError = 'Su apellido es requerido';
                     });
                   }
-
                   if (_email.isEmpty) {
                     setState(() {
                       _emailError = 'Por favor, ingrese su correo electrónico';
@@ -549,21 +565,21 @@ class _RegisterFormState extends State<RegisterForm> {
                       _passwordError == null &&
                       _nombreError == null &&
                       _apellidoError == null) {
-                    await registerUser(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              const ProfileWithCover()),
-                    );
+                    bool success = await registerUser(context);
+                    if (success) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const CongratulationMessage()),
+                      );
+                    }
                   }
                 }
               },
               child: const Text(
                 'Crear cuenta',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
+                style: TextStyle(color: Colors.black),
               ),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 45),

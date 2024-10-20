@@ -8,6 +8,8 @@ import 'package:quickcar_aplication/service_locator.dart';
 import 'dart:io';
 
 class AuthRepositoryImpl extends AuthRepository {
+  AuthRepositoryImpl(AuthFirebaseService authFirebaseService);
+
   
   @override
   Future<Either<Exception, String>> signup(CreateUserRequest createUserRequest) async {
@@ -31,7 +33,7 @@ class AuthRepositoryImpl extends AuthRepository {
   Future<Either<Exception, void>> signout() async {
     try {
       await sl<AuthFirebaseService>().signout();
-      return Right(null); // Indica que la operación fue exitosa
+      return Right(null);
     } catch (e) {
       return Left(Exception("Error al cerrar sesión: ${e.toString()}"));
     }
@@ -43,6 +45,15 @@ class AuthRepositoryImpl extends AuthRepository {
       return await sl<AuthFirebaseService>().uploadImages(folder, imageFile);
     } catch (e) {
       return Left(Exception("Error al cargar la imagen: ${e.toString()}"));
+    }
+  }
+  
+  @override
+  Future<Either<Exception, String>> verifyEmailAndCreateUserTable(CreateUserRequest createUserRequest) async {
+   try {
+      return await sl<AuthFirebaseService>().verifyEmailAndCreateUserTable(createUserRequest); 
+    } catch (e) {
+      return Left(SignInException("Error al iniciar sesión: ${e.toString()}"));
     }
   }
 }

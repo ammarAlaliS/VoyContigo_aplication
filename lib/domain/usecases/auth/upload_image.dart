@@ -5,9 +5,10 @@ import 'package:quickcar_aplication/domain/repository/auth/auth.dart';
 import 'package:quickcar_aplication/service_locator.dart';
 
 class UploadImageUseCase implements Usecase<Either<Exception, String>, CreateUploadRequest> {
+  UploadImageUseCase(AuthRepository authRepository);
+
   @override
   Future<Either<Exception, String>> call({CreateUploadRequest? params}) async {
-    // Asegúrate de que params no sea nulo antes de intentar usarlo
     if (params == null) {
       return Left(Exception('Los parámetros de carga de imagen son nulos.'));
     }

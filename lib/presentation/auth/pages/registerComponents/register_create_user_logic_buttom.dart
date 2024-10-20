@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickcar_aplication/data/models/auth/create_user_request.dart';
-import 'package:quickcar_aplication/domain/usecases/auth/signup.dart';
+import 'package:quickcar_aplication/domain/usecases/auth/Signup.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/state/user_state.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/funtions/show_bottom_sheet.dart';
 import 'package:quickcar_aplication/service_locator.dart';
 
-Future<void> registerUser(BuildContext context) async {
+Future<bool> registerUser(BuildContext context) async {
   final userState = context.read<UserCubit>().state;
 
   if (_areFieldsValid(userState)) {
@@ -29,23 +29,27 @@ Future<void> registerUser(BuildContext context) async {
       Navigator.of(context).pop();
 
       // Manejo de resultados
-      result.fold(
+      return result.fold(
         (failure) {
-          String errorMessage = failure.toString(); // Personaliza esto si tienes un tipo específico
-          _showSnackBar(context, 'Error al crear la cuenta: $errorMessage', Colors.red);
+          String errorMessage = failure
+              .toString(); // Personaliza esto si tienes un tipo específico
+          _showSnackBar(context, '$errorMessage', Colors.red);
+          return false; // Indica que hubo un error
         },
         (success) {
-          _showSnackBar(context, 'Cuenta creada con éxito', Colors.green);
-          showBottomSheetCheck(context);
+          return true; // Indica que fue exitoso
         },
       );
     } catch (error) {
       // Cerrar el diálogo de carga y mostrar error
       Navigator.of(context).pop();
       _showSnackBar(context, 'Error: $error', Colors.red);
+      return false; // Indica que hubo un error
     }
   } else {
-    _showSnackBar(context, 'Por favor complete todos los campos requeridos', Colors.red);
+    _showSnackBar(
+        context, 'Por favor complete todos los campos requeridos', Colors.red);
+    return false; // Indica que los campos no son válidos
   }
 }
 
@@ -53,7 +57,11 @@ Future<void> registerUser(BuildContext context) async {
 void _showSnackBar(BuildContext context, String message, Color color) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(message),
+      content: Text(
+          style: const TextStyle(
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+          message),
       backgroundColor: color,
     ),
   );
@@ -61,14 +69,22 @@ void _showSnackBar(BuildContext context, String message, Color color) {
 
 // Método auxiliar para mostrar el diálogo de carga
 void _showLoadingDialog(BuildContext context) {
+  final theme = Theme.of(context);
+  final isDarkMode = theme.brightness == Brightness.dark;
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (BuildContext context) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(
+              isDarkMode ? Colors.white : Colors.black),
+        ),
+      );
     },
   );
 }
+
 
 // Método para verificar si los campos son válidos
 bool _areFieldsValid(UserState userState) {

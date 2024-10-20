@@ -49,12 +49,14 @@ class RowEmail extends StatelessWidget {
               text: 'Verificado',
               borderColor: Colors.green,
               bgColor: Colors.green.withOpacity(0.2),
+              letterHeight: 1.5,
             )
           else
             BasicWarningMessage(
               text: 'No verificado',
               borderColor: Colors.red,
               bgColor: Colors.red.withOpacity(0.2),
+              letterHeight: 1.5,
             ),
         ],
       ),

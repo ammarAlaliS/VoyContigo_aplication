@@ -6,13 +6,16 @@ class UserState {
   final String lastName;
   final String email;
   final String password;
+
   final String profileImgUrl;
   final String presentationImgUrl;
-  final String userDescription;
   final File? presentationImg;
   final File? profileImg;
+
+  final String userDescription;
+
   final UserRole role;
-  final bool isLoading;
+
   final String? errorMessage;
 
   // Constructor
@@ -27,7 +30,6 @@ class UserState {
     this.presentationImg,
     this.profileImg,
     this.role = UserRole.usuario,
-    this.isLoading = false,
     this.errorMessage,
   });
 
@@ -37,14 +39,17 @@ class UserState {
     String? lastName,
     String? email,
     String? password,
+
     String? profileImgUrl,
     String? presentationImgUrl,
-    String? userDescription,
     File? presentationImg,
     File? profileImg,
+
+    String? userDescription,
     UserRole? role,
     bool? isLoading,
     String? errorMessage,
+    
   }) {
     return UserState(
       firstName: firstName ?? this.firstName,
@@ -57,7 +62,6 @@ class UserState {
       presentationImg: presentationImg ?? this.presentationImg,
       profileImg: profileImg ?? this.profileImg,
       role: role ?? this.role,
-      isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }

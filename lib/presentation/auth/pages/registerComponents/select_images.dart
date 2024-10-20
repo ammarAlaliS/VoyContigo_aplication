@@ -1,9 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:quickcar_aplication/data/models/auth/user_role.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/state/user_state.dart';
 
@@ -23,11 +26,9 @@ class _SelectImagesState extends State<SelectImages> {
     final status = await Permission.photos.request();
     if (status.isDenied) {
       print("Permiso de galería denegado.");
-
       return false;
     } else if (status.isPermanentlyDenied) {
       print("Permiso de galería denegado permanentemente.");
-      // Informar al usuario que debe habilitar el permiso manualmente
       return false;
     }
     return status.isGranted;
@@ -36,7 +37,6 @@ class _SelectImagesState extends State<SelectImages> {
   Future<void> _pickImage(bool isCoverImage) async {
     final hasPermission = await _requestGalleryPermission();
     if (!hasPermission) {
-      // Mostrar un mensaje al usuario
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Permiso de galería es necesario para seleccionar imágenes.")),
       );
@@ -55,8 +55,6 @@ class _SelectImagesState extends State<SelectImages> {
         }
       });
     } else {
-      // Manejar cuando no se selecciona ninguna imagen
-      print("No se seleccionó ninguna imagen.");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("No se seleccionó ninguna imagen.")),
       );
@@ -66,6 +64,7 @@ class _SelectImagesState extends State<SelectImages> {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return BlocBuilder<UserCubit, UserState>(
       builder: (context, userState) {
         return Stack(
@@ -76,18 +75,11 @@ class _SelectImagesState extends State<SelectImages> {
               child: Container(
                 width: double.infinity,
                 height: 300,
-                color: Colors.grey[300],
+                color: Colors.white,
                 child: _coverImage != null
-                    ? Image.file(
-                        _coverImage!,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      )
+                    ? Image.file(_coverImage!, fit: BoxFit.cover)
                     : userState.presentationImg != null
-                        ? Image.file(
-                            userState.presentationImg!,
-                            fit: BoxFit.cover,
-                          )
+                        ? Image.file(userState.presentationImg!, fit: BoxFit.cover)
                         : Icon(Icons.camera_alt, size: 50, color: Colors.grey),
               ),
             ),
@@ -106,38 +98,9 @@ class _SelectImagesState extends State<SelectImages> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ClipOval(
-                            child: GestureDetector(
-                              onTap: () => _pickImage(false),
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                decoration: BoxDecoration(shape: BoxShape.circle),
-                                child: Center(
-                                  child: CircleAvatar(
-                                    radius: 42,
-                                    backgroundColor: isDarkMode ? Colors.black : Colors.white,
-                                    child: _profileImage != null
-                                        ? CircleAvatar(
-                                            radius: 38,
-                                            backgroundImage: FileImage(_profileImage!),
-                                          )
-                                        : userState.profileImg != null
-                                            ? CircleAvatar(
-                                                radius: 38,
-                                                backgroundImage: FileImage(userState.profileImg!),
-                                              )
-                                            : Icon(Icons.camera_alt, size: 30, color: Colors.grey),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          _buildProfileImage(isDarkMode, userState),
                           SizedBox(width: 10),
-                          Text(
-                            '${userState.firstName} ${userState.lastName}',
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
+                          _buildUserInfo(userState),
                         ],
                       ),
                     ),
@@ -150,4 +113,77 @@ class _SelectImagesState extends State<SelectImages> {
       },
     );
   }
+
+  Widget _buildProfileImage(bool isDarkMode, UserState userState) {
+    return ClipOval(
+      child: GestureDetector(
+        onTap: () => _pickImage(false),
+        child: Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(shape: BoxShape.circle),
+          child: Center(
+            child: CircleAvatar(
+              radius: 42,
+              backgroundColor: isDarkMode ? Colors.black : Colors.white,
+              child: _profileImage != null
+                  ? CircleAvatar(radius: 38, backgroundImage: FileImage(_profileImage!))
+                  : userState.profileImg != null
+                      ? CircleAvatar(radius: 38, backgroundImage: FileImage(userState.profileImg!))
+                      : Icon(Icons.camera_alt, size: 30, color: Colors.grey),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserInfo(UserState userState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          '${userState.firstName} ${userState.lastName}',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        Row(
+          children: [
+            Text(
+              'Seleccione un rol:',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+            ),
+            SizedBox(width: 5),
+            _buildRoleDropdown(userState),
+          ],
+        ),
+      ],
+    );
+  }
+
+ Widget _buildRoleDropdown(UserState userState) {
+  return Row(
+    children: [
+      DropdownButton<String>(
+        value: userState.role.name,
+        dropdownColor: Colors.black,
+        iconEnabledColor: Colors.white,
+        style: TextStyle(color: Colors.white),
+        items: [UserRole.usuario, UserRole.conductor]
+            .map<DropdownMenuItem<String>>((UserRole role) {
+          return DropdownMenuItem<String>(
+            value: role.name,
+            child: Text(role.name),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          if (newValue != null) {
+            context.read<UserCubit>().updateRole(UserRoleExtension.fromString(newValue));
+          }
+        },
+      ),
+    ],
+  );
+}
+
 }

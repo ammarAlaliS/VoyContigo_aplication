@@ -58,6 +58,7 @@ class _RowPasswordState extends State<RowPassword> {
               text: isPasswordVisible ? 'Ocultar' : 'Mostrar',
               borderColor: isPasswordVisible ? Colors.green : (widget.isDarkMode ? Colors.white : Colors.green),
               bgColor: isPasswordVisible ? Colors.green.withOpacity(0.2) : Colors.green.withOpacity(0.2),
+              letterHeight: 1.5,
             ),
           ),
         ],

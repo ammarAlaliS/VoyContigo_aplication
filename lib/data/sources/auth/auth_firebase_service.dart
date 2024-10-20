@@ -12,14 +12,18 @@ import 'package:quickcar_aplication/domain/handleException/sign_in_exception.dar
 abstract class AuthFirebaseService {
   Future<Either<Exception, String>> signup(CreateUserRequest createUserRequest);
   Future<Either<Exception, String>> uploadImages(String folder, File imageFile);
-  Future<Either<SignInException, String>> signin(CreateSignInUserRequest createSignInUserRequest);
+  Future<Either<SignInException, String>> signin(
+      CreateSignInUserRequest createSignInUserRequest);
+  Future<Either<Exception, String>> verifyEmailAndCreateUserTable(
+      CreateUserRequest createUserRequest);
   Future<Either<Exception, void>> signout();
 }
 
 class AuthFirebaseServiceImpl extends AuthFirebaseService {
-
+  
   @override
-  Future<Either<Exception, String>> signup(CreateUserRequest createUserRequest) async {
+  Future<Either<Exception, String>> signup(
+      CreateUserRequest createUserRequest) async {
     try {
       // Validar si el correo y la contraseña cumplen con las reglas
       if (!isValidEmail(createUserRequest.email)) {
@@ -31,7 +35,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       }
 
       // Crear usuario en Firebase Auth
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: createUserRequest.email,
         password: createUserRequest.password,
       );
@@ -40,8 +45,8 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
       await userCredential.user?.sendEmailVerification();
 
       // Informar al usuario que debe verificar su correo electrónico
-      return const Right("Se ha enviado un enlace de verificación a tu correo. Por favor, verifica tu correo. Cuenta creada exitosamente");
-      
+      return const Right(
+          "Se ha enviado un enlace de verificación a tu correo. Por favor, verifica tu correo. Cuenta creada exitosamente");
     } on FirebaseAuthException catch (e) {
       String message;
       switch (e.code) {
@@ -60,20 +65,18 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
     }
   }
 
-  // Método para verificar el correo electrónico
-  Future<Either<Exception, String>> verifyEmail(CreateUserRequest createUserRequest) async {
+  @override
+  Future<Either<Exception, String>> verifyEmailAndCreateUserTable(
+      CreateUserRequest createUserRequest) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        // Verificar si el correo electrónico ha sido verificado
-        await user.reload(); // Asegúrate de que la información del usuario esté actualizada
-        if (user.emailVerified) {
-          // Si el correo está verificado, crear documento en Firestore
+       
+        await user.reload();
+        {
           await createUserDocument(user, createUserRequest);
           return const Right("Usuario creado exitosamente.");
-        } else {
-          return Left(Exception("El correo electrónico no está verificado. Por favor verifica tu correo."));
         }
       } else {
         return Left(Exception("No hay usuario autenticado."));
@@ -84,28 +87,29 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   // Método para crear el documento en Firestore
-  Future<void> createUserDocument(User user, CreateUserRequest createUserRequest) async {
+  Future<void> createUserDocument(
+      User user, CreateUserRequest createUserRequest) async {
     final firestore = FirebaseFirestore.instance;
 
     await firestore.collection('users').doc(user.uid).set({
       'firstName': createUserRequest.name,
       'lastName': createUserRequest.lastName,
       'email': createUserRequest.email,
-      'profileImgUrl': createUserRequest.profileImgUrl.isNotEmpty 
-          ? createUserRequest.profileImgUrl 
-          : 'https://firebasestorage.googleapis.com/v0/b/quickarapp.appspot.com/o/profile_images%2Fuser.png?alt=media&token=3662df30-188b-46b9-9bf2-8dd294efda10',  
-      'presentationImgUrl': createUserRequest.presentationImgUrl.isNotEmpty 
-          ? createUserRequest.presentationImgUrl 
+      'profileImgUrl': createUserRequest.profileImgUrl.isNotEmpty
+          ? createUserRequest.profileImgUrl
+          : 'https://firebasestorage.googleapis.com/v0/b/quickarapp.appspot.com/o/profile_images%2Fuser.png?alt=media&token=3662df30-188b-46b9-9bf2-8dd294efda10',
+      'presentationImgUrl': createUserRequest.presentationImgUrl.isNotEmpty
+          ? createUserRequest.presentationImgUrl
           : 'https://firebasestorage.googleapis.com/v0/b/quickarapp.appspot.com/o/portal_images%2Fhyundai-motor-group-bfLoXCRijvQ-unsplash.jpg?alt=media&token=519ae5ac-a8cc-432d-b0bc-5435801c8629',
       'userDescription': createUserRequest.userDescription,
       'role': createUserRequest.role.name,
       'isActive': true,
-      'isVerified': true,
     });
   }
 
   @override
-  Future<Either<Exception, String>> uploadImages(String folder, File imageFile) async {
+  Future<Either<Exception, String>> uploadImages(
+      String folder, File imageFile) async {
     try {
       final ref = FirebaseStorage.instance
           .ref()
@@ -124,20 +128,20 @@ class AuthFirebaseServiceImpl extends AuthFirebaseService {
   }
 
   @override
-  Future<Either<SignInException, String>> signin(CreateSignInUserRequest createSignInUserRequest) async {
+  Future<Either<SignInException, String>> signin(
+      CreateSignInUserRequest createSignInUserRequest) async {
     try {
       // Validar el formato del correo antes de realizar el inicio de sesión
       if (!isValidEmail(createSignInUserRequest.email)) {
         return Left(SignInException('El correo electrónico no es válido.'));
       }
-       
+
       // Intentar la autenticación con Firebase
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: createSignInUserRequest.email,
           password: createSignInUserRequest.password);
 
       return const Right("Inicio de sesión exitoso");
-  
     } on FirebaseAuthException catch (e) {
       // Manejo de errores específicos de Firebase
       return Left(SignInException(_handleSignInException(e)));

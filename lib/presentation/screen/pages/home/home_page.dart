@@ -1,37 +1,56 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/state/user_state.dart';
+import 'package:quickcar_aplication/presentation/auth/pages/api/get_user_data.dart';
+import 'package:quickcar_aplication/presentation/screen/pages/search/search_page.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      // Cargar datos del usuario cuando la página se inicializa
-      final userCubit = BlocProvider.of<UserCubit>(context);
-      userCubit.loadUserData(user.uid);
-      print(user.uid); // Cambiado de user.id a user.uid
+    loadingFetch();
+  }
+
+  Future<void> loadingFetch() async {
+    var result = await getUserData();
+    if (result != null) {
+      context.read<UserCubit>().updateFirstName(result.firstName);
+      context.read<UserCubit>().updateLastName(result.lastName);
+      context.read<UserCubit>().updateEmail(result.email);
+      context.read<UserCubit>().updateProfileImgUrl(result.profileImgUrl);
     } else {
-      print('Error: No hay un usuario autenticado');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error fetching user data")),
+      );
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+
+    // Obtiene las dimensiones de la pantalla para ajustes responsivos
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: BlocListener<UserCubit, UserState>(
@@ -44,29 +63,36 @@ class _HomePageState extends State<HomePage> {
         },
         child: BlocBuilder<UserCubit, UserState>(
           builder: (context, state) {
-            if (state.isLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state.firstName.isNotEmpty && state.lastName.isNotEmpty) {
-              return SingleChildScrollView(
+            return Skeletonizer(
+              enabled: isLoading,
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 10),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isDarkMode ? Color.fromARGB(255, 5, 14, 26) : Colors.white,
-                          border: Border.all(color: theme.dividerColor.withOpacity(0.1), width: 1),
-                          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                          color: isDarkMode
+                              ? const Color.fromARGB(255, 5, 14, 26)
+                              : Colors.white,
+                          border: Border.all(
+                              color: theme.dividerColor.withOpacity(0.1),
+                              width: 1),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
                           boxShadow: [
                             BoxShadow(
-                              color: isDarkMode ? Colors.black54 : Colors.grey.withOpacity(0.3),
+                              color: isDarkMode
+                                  ? Colors.black54
+                                  : Colors.grey.withOpacity(0.3),
                               offset: const Offset(0, 4),
                               blurRadius: 8,
                               spreadRadius: 1,
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.all(10.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: Row(
                           children: [
                             Column(
@@ -74,71 +100,79 @@ class _HomePageState extends State<HomePage> {
                                 GestureDetector(
                                   onTap: () {},
                                   child: CircleAvatar(
-                                    radius: 42,
-                                    backgroundColor: isDarkMode ? Colors.black : Colors.white,
+                                    radius: screenWidth * 0.1,
+                                    backgroundColor: isDarkMode
+                                        ? Colors.black
+                                        : Colors.black,
                                     child: CircleAvatar(
-                                      radius: 38,
-                                      backgroundImage: NetworkImage(state.profileImgUrl),
+                                      radius: screenWidth * 0.09,
+                                      backgroundImage: NetworkImage(state
+                                              .profileImgUrl.isNotEmpty
+                                          ? state.profileImgUrl
+                                          : 'https://via.placeholder.com/150'),
                                     ),
                                   ),
                                 ),
                                 Wrap(
                                   children: [
-                                    Text(
-                                      "Role:",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        height: 1,
-                                        fontWeight: FontWeight.w500,
-                                        color: isDarkMode ? Colors.white : Colors.black54,
-                                      ),
-                                    ),
-                                    Text(
+                                    AutoSizeText(
                                       state.role.toString().split('.').last,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: screenWidth *
+                                            0.035, // Tamaño dinámico
                                         height: 1,
                                         fontWeight: FontWeight.w600,
                                         color: isDarkMode
-                                            ? const Color.fromARGB(179, 255, 255, 255)
+                                            ? const Color.fromARGB(
+                                                179, 255, 255, 255)
                                             : Colors.black54,
                                       ),
+                                      maxLines: 1,
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            AutoSizeText(
                                               "¡Hola de nuevo!",
                                               style: TextStyle(
-                                                fontSize: 16,
+                                                fontSize: screenWidth *
+                                                    0.045, // Ajuste dinámico
                                                 fontWeight: FontWeight.bold,
-                                                color: isDarkMode ? Colors.white : Colors.black,
+                                                color: isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black,
                                               ),
-                                              textAlign: TextAlign.start,
+                                              maxLines: 1,
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                                              child: Text(
-                                                "${state.firstName} ${state.lastName}", // Usa nombres del estado
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 0,
+                                                      horizontal: 5),
+                                              child: AutoSizeText(
+                                                "${state.firstName} ${state.lastName}",
                                                 style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: screenWidth *
+                                                      0.05, // Ajuste dinámico
                                                   fontWeight: FontWeight.w900,
-                                                  color: isDarkMode ? Colors.white : Colors.black,
+                                                  color: isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                 ),
+                                                maxLines: 1,
                                               ),
                                             ),
                                           ],
@@ -150,65 +184,71 @@ class _HomePageState extends State<HomePage> {
                                             padding: const EdgeInsets.all(10),
                                             decoration: const BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: Colors.cyan,
+                                              color: Color.fromARGB(
+                                                  255, 23, 112, 6),
                                             ),
-                                            child: const Text(
-                                              '3',
+                                            child: AutoSizeText(
+                                              '3', // Cambia esto por la cantidad real de viajes
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize: 14,
+                                                fontSize: screenWidth *
+                                                    0.035, // Ajuste dinámico
                                               ),
+                                              maxLines: 1,
                                             ),
                                           ),
-                                          Text(
+                                          AutoSizeText(
                                             "Viajes totales",
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: screenWidth *
+                                                  0.035, // Ajuste dinámico
                                               height: 1,
                                               fontWeight: FontWeight.bold,
                                               color: isDarkMode
-                                                  ? const Color.fromARGB(255, 255, 255, 255)
+                                                  ? const Color.fromARGB(
+                                                      255, 255, 255, 255)
                                                   : Colors.black54,
                                             ),
+                                            maxLines: 1,
                                           ),
                                         ],
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: isDarkMode ? Color.fromARGB(255, 0, 0, 0) : Colors.white,
-                                      border: Border.all(color: Colors.grey, width: 1),
-                                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                                      color: isDarkMode
+                                          ? Color.fromARGB(255, 0, 0, 0)
+                                          : Colors.white,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0)),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: isDarkMode ? Colors.black54 : Colors.grey.withOpacity(0.3),
+                                          color: isDarkMode
+                                              ? Colors.black54
+                                              : Colors.grey.withOpacity(0.3),
                                           offset: const Offset(0, 4),
                                           blurRadius: 8,
                                           spreadRadius: 1,
                                         ),
                                       ],
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(7.0),
-                                      child: Wrap(
-                                        children: [
-                                          Text(
-                                            "¿Listo para tu próximo viaje en Quickcar? Elige tu conductor y tu asiento",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              height: 1.3,
-                                              fontWeight: FontWeight.w500,
-                                              color: isDarkMode ? Colors.white70 : Colors.black54,
-                                            ),
-                                          ),
-                                        ],
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(7.0),
+                                      child: AutoSizeText(
+                                        "¿Listo para tu próximo viaje en Quickcar? Elige tu conductor y tu asiento",
+                                        style: TextStyle(
+                                          fontSize: 15, // Ajuste automático
+                                          height: 1.3,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        maxLines: 3,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(height: 14),
+                                  const SizedBox(height: 14),
                                   Row(
                                     children: [
                                       Expanded(
@@ -216,52 +256,68 @@ class _HomePageState extends State<HomePage> {
                                           height: 35,
                                           child: ElevatedButton(
                                             style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all(isDarkMode
-                                                  ? Color.fromARGB(255, 1, 247, 255)
-                                                  : Color.fromARGB(255, 6, 143, 255)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      isDarkMode
+                                                          ? Color.fromARGB(
+                                                              255, 0, 114, 237)
+                                                          : Color.fromARGB(255,
+                                                              6, 143, 255)),
                                             ),
-                                            onPressed: () {}, // Define tu función onPressed aquí
-                                            child: Text(
+                                            onPressed:
+                                                () {
+                                                    Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const SearchPage()),
+                                              );
+                                                }, // Acción del botón Buscar Viaje
+                                            child: const AutoSizeText(
                                               "Buscar Viaje",
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 height: 1,
                                                 fontWeight: FontWeight.bold,
-                                                color: isDarkMode
-                                                    ? const Color.fromARGB(255, 13, 13, 13)
-                                                    : const Color.fromARGB(255, 255, 255, 255),
+                                                color: Colors.white,
                                               ),
+                                              maxLines: 1,
                                             ),
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                       Expanded(
                                         child: SizedBox(
                                           height: 35,
                                           child: ElevatedButton(
                                             style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.all(
-                                                  Color.fromARGB(255, 255, 201, 4)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      isDarkMode
+                                                          ? Color.fromARGB(
+                                                              255, 209, 137, 4)
+                                                          : Color.fromARGB(255,
+                                                              209, 137, 4)),
                                             ),
-                                            onPressed: () {}, // Define tu función onPressed aquí
-                                            child: Text(
-                                              "Mis Viajes",
+                                            onPressed: () {
+                                            
+                                            },
+                                            child: const AutoSizeText(
+                                              "Mis viajes",
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 height: 1,
                                                 fontWeight: FontWeight.bold,
-                                                color: isDarkMode
-                                                    ? const Color.fromARGB(255, 0, 0, 0)
-                                                    : Colors.black54,
+                                                color: Colors.white,
                                               ),
+                                              maxLines: 1,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(height: 5),
                                 ],
                               ),
                             ),
@@ -271,10 +327,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              );
-            } else {
-              return Center(child: Text("Error loading user data"));
-            }
+              ),
+            );
           },
         ),
       ),

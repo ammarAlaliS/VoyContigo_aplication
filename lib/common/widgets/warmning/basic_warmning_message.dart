@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class BasicWarningMessage extends StatelessWidget {
   final String text; 
   final Color borderColor; 
-  final Color bgColor; 
+  final Color bgColor;
+  final double letterHeight; 
 
   const BasicWarningMessage({
     super.key,
     required this.text,
     required this.borderColor,
-    required this.bgColor,
+    required this.bgColor, 
+    required this.letterHeight,
   });
 
   @override
@@ -30,6 +32,7 @@ class BasicWarningMessage extends StatelessWidget {
             fontSize: 12,
             fontWeight: FontWeight.bold,
             color: borderColor,
+   
           ),
         ),
       ),

@@ -16,6 +16,8 @@ abstract class AuthRepository {
   /// Devuelve un [Either] que contiene una [Exception] o un [String] (URL de la imagen).
   Future<Either<Exception, String>> uploadImages(String folder, File imageFile);
 
+  Future<Either<Exception, String>> verifyEmailAndCreateUserTable(CreateUserRequest createUserRequest);
+
   /// Inicia sesión con un usuario existente.
   /// 
   /// Devuelve un [Either] que contiene un [SignInException] o un [String] (mensaje de éxito).
