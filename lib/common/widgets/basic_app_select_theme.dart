@@ -37,7 +37,7 @@ class BasicAppSelectTheme extends StatelessWidget {
                 height: circleSize,
                 width: circleSize,
                 decoration: BoxDecoration(
-                  color: initialCircleColor.withOpacity(0.5),
+                  color: initialCircleColor.withOpacity(0.9),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: initialBorderColor.withOpacity(0.2),

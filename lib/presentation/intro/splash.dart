@@ -2,9 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
+import 'package:quickcar_aplication/presentation/choice_mode/pages/choice_mode.dart';
 import 'package:quickcar_aplication/presentation/intro/pages/get_started_page.dart';
+import 'package:quickcar_aplication/presentation/intro/set_system_color.dart';
 import 'package:quickcar_aplication/presentation/root/pages/root.dart';
+import 'package:quickcar_aplication/presentation/widgets/logo.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -28,22 +32,41 @@ class _SplashPageState extends State<SplashPage> {
     final scaffoldBgColor = theme.scaffoldBackgroundColor;
     final isDarkMode = theme.brightness == Brightness.dark;
 
+    setSystemUIOverlayStyle(
+      statusBarColor:
+          isDarkMode ? Colors.black : Color.fromARGB(255, 219, 255, 238),
+      systemNavigationBarColor:
+          isDarkMode ? Colors.black : Color.fromARGB(255, 219, 255, 238),
+      statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness:
+          isDarkMode ? Brightness.light : Brightness.dark,
+    );
+
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              AppImages.logo,
-              height: 60,
+            Container(
+              height: 150,
+              width: 150, // Asegúrate de que el ancho sea igual a la altura
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 219, 255, 238),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                // Centra el contenido
+                child: Logo(),
+              ),
             ),
             SizedBox(height: 40),
             SizedBox(
               width: 20,
               height: 20,
               child: CircularProgressIndicator(
-                color: isDarkMode ? Colors.white : Colors.black.withOpacity(0.7),
+                color:
+                    isDarkMode ? Colors.white : Colors.black.withOpacity(0.7),
               ),
             ),
           ],
@@ -74,7 +97,7 @@ class _SplashPageState extends State<SplashPage> {
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (BuildContext context) => GetStartedPage()),
+          MaterialPageRoute(builder: (BuildContext context) => ChoiceMode()),
         );
       }
     } else {
@@ -82,7 +105,7 @@ class _SplashPageState extends State<SplashPage> {
       print("No user is signed in. Redirecting to GetStartedPage.");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (BuildContext context) => GetStartedPage()),
+        MaterialPageRoute(builder: (BuildContext context) => ChoiceMode()),
       );
     }
   }

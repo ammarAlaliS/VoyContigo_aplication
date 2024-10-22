@@ -1,7 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
 
 import 'dart:ui';
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -164,9 +164,8 @@ class _AppBarPageState extends State<AppBarPage> {
                                   (value) {
                                     Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              SignInPage()), 
-                                      (Route<dynamic> route) =>false,
+                                          builder: (context) => SignInPage()),
+                                      (Route<dynamic> route) => false,
                                     );
                                   },
                                 );
@@ -205,12 +204,27 @@ class _AppBarPageState extends State<AppBarPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: isDarkMode ?Color.fromARGB(255, 5, 14, 26) : Colors.white,
+          gradient: LinearGradient(
+            colors: isDarkMode
+                ?[
+                    const Color.fromARGB(255, 29, 151, 31),
+                    const Color.fromARGB(255, 16, 34, 18),
+                    const Color.fromARGB(255, 29, 151, 31)
+                  ]
+                : [
+                    const Color.fromARGB(255, 0, 0, 0),
+                    const Color.fromARGB(255, 16, 34, 18),
+                    const Color.fromARGB(255, 0, 0, 0)
+                  ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
           border: Border.all(
             color: theme.dividerColor.withOpacity(0.1),
             width: 1,
@@ -233,23 +247,17 @@ class _AppBarPageState extends State<AppBarPage> {
               toolbarHeight: 80,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    AppImages.logo,
-                    height: 35,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      "Quickcar",
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Eina02',
-                        fontSize: 28,
-                        color: isDarkMode
-                            ? const Color(0xFF02EAFF)
-                            : const Color.fromARGB(255, 24, 24, 35),
-                      ),
+                  Text(
+                    "VoyContigo",
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      fontSize:
+                          math.max(screenWidth * 0.04, screenWidth * 0.06),
+                      color: isDarkMode
+                          ? const Color(0xFF02EAFF)
+                          : Color.fromARGB(255, 255, 170, 86),
                     ),
                   ),
                 ],

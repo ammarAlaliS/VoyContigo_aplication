@@ -5,7 +5,7 @@ class AppColors {
   static const primary = Color(0xFF02EAFF); // Azul principal
   static const secondary = Color(0xFF2ECC71); // Verde secundario
   static const accent = Color(0xFFE74C3C); // Rojo acento
-  static const lightBackground = Color(0xFFF9F9F9); // Fondo claro
+  static const lightBackground = Color.fromARGB(255, 219, 255, 238); // Fondo claro
   static const primaryText = Color(0xFF333333); // Texto principal
   static const secondaryText = Color(0xFF7F8C8D); // Texto secundario
   static const border = Color(0xFFE0E0E0); // Color del borde

@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickcar_aplication/common/widgets/appbar/app_bar_buttom.dart';
+import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/sign_in_form.dart';
+import 'package:quickcar_aplication/presentation/intro/set_system_color.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';
 
 class SignInPage extends StatefulWidget {
@@ -21,8 +21,8 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
   late Animation<double> _opacityAnimation;
   late AnimationController _animationTranslate;
   late Animation<double> _translationAnimation;
-  bool _isTextVisible = false;
-  bool _areTermsVisible = false; 
+  bool _isTextVisible = false; // Controla la visibilidad del texto
+  bool _areTermsVisible = false; // Controla la visibilidad de los términos
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
       parent: _animationTranslate,
       curve: Curves.easeInSine,
     ));
-    
+
     // Iniciar la animación del logo
     _controller.forward().then((_) {
       setState(() {
@@ -57,7 +57,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
 
       _animationTranslate.forward().then((_) {
         setState(() {
-          _areTermsVisible = true; 
+          _areTermsVisible = true; // Los términos deben ser visibles al final
         });
       });
     });
@@ -77,17 +77,19 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
     final light = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: isDarkMode ? const Color.fromARGB(255, 0, 0, 0) : Color(0xFFF9F9F9),
+   setSystemUIOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: isDarkMode ? Colors.black : Color.fromARGB(255, 219, 255, 238),
       statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-      systemNavigationBarColor: isDarkMode ? const Color.fromARGB(255, 40, 40, 40) : Colors.white,
       systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-    ));
+    );
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: scaffoldBg,
-        body: Stack(
+    return Scaffold(
+      backgroundColor: scaffoldBg,
+         extendBody: true,
+      extendBodyBehindAppBar: true,
+      body: Center(
+        child: Stack(
           children: [
             // Fondo
             SvgPicture.asset(
@@ -97,7 +99,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height,
               color: isDarkMode
                   ? const Color.fromARGB(255, 14, 14, 14)
-                  : const Color.fromARGB(255, 243, 243, 243),
+                  : const Color.fromARGB(109, 224, 224, 224),
             ),
             Align(
               alignment: Alignment.topRight,
@@ -118,111 +120,127 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
               ),
             ),
             // Contenido principal
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
-                  AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      return Container(
-                        transform: Matrix4.translationValues(_animation.value, 0, 0),
-                        child: child,
-                      );
-                    },
-                    child: Logo(),
-                  ),
-                  SizedBox(height: 20),
-                  AnimatedOpacity(
-                    opacity: _isTextVisible ? _opacityAnimation.value : 0,
-                    duration: const Duration(milliseconds: 500),
-                    child: Text(
-                      'INICIA SESION Y COMIENZA A CREAR EXPERIENCIAS UNICAS',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: light,
-                        height: 1.2,
-                        letterSpacing: -0.9,
-                      ),
-                      textAlign: TextAlign.center,
+            Center( // Añadido para centrar el contenido verticalmente
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center, // Asegura que el contenido esté centrado
+                  children: [
+                    AnimatedBuilder(
+                      animation: _animation,
+                      builder: (context, child) {
+                        return Container(
+                          transform:
+                              Matrix4.translationValues(_animation.value, 0, 0),
+                          child: child,
+                          height: 150,
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 219, 255, 238),
+                            shape: BoxShape.circle,
+                          ),
+                        );
+                      },
+                      child: Logo(),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  AnimatedBuilder(
-                    animation: _translationAnimation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, _translationAnimation.value),
-                        child: child,
-                      );
-                    },
-                    child: SignInForm(),
-                  ),
-                
-                  const SizedBox(height: 50),
-                  if (_areTermsVisible)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Center( // Centramos el contenido
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            Text(
-                              "Al continuar aceptas los",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: isDarkMode ? Colors.white : Colors.black45,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            InkWell(
-                              onTap: () {},
-                              child: Text(
-                                "Términos",
+                    SizedBox(height: 20),
+                    AnimatedOpacity(
+                      opacity: _isTextVisible ? _opacityAnimation.value : 0,
+                      duration: const Duration(milliseconds: 500),
+                      child: Text(
+                        'INICIA SESION Y COMIENZA A CREAR EXPERIENCIAS UNICAS',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
+                          color: light,
+                          height: 1.2,
+                          letterSpacing: -0.9,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    AnimatedBuilder(
+                      animation: _translationAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _translationAnimation.value),
+                          child: child,
+                        );
+                      },
+                      child: SignInForm(),
+                    ),
+                    const SizedBox(height: 50),
+                    // Mantenemos el widget de términos visible desde el principio, solo controlamos la opacidad
+                    AnimatedOpacity(
+                      opacity: _areTermsVisible ? 1 : 0, // Controla la opacidad según el estado
+                      duration: const Duration(milliseconds: 500),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Center(
+                          child: Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            alignment: WrapAlignment.center,
+                            children: [
+                              Text(
+                                "Al continuar aceptas los",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w900,
-                                  color: isDarkMode ? Colors.cyan : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black45,
                                 ),
                               ),
-                            ),
-                            Text(
-                              " y la ",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: isDarkMode ? Colors.white : Colors.black45,
+                              SizedBox(width: 5),
+                              InkWell(
+                                onTap: () {},
+                                child: Text(
+                                  "Términos",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                    color:
+                                        isDarkMode ? Colors.cyan : Colors.black,
+                                  ),
+                                ),
                               ),
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: Text(
-                                "Política de privacidad",
+                              Text(
+                                " y la ",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w900,
-                                  color: isDarkMode ? Colors.cyan : Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black45,
                                 ),
                               ),
-                            ),
-                            Text(
-                              " de Quickcar",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: isDarkMode ? Colors.white : Colors.black45,
+                              InkWell(
+                                onTap: () {},
+                                child: Text(
+                                  "Política de privacidad",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w900,
+                                    color:
+                                        isDarkMode ? Colors.cyan : Colors.black,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                              Text(
+                                " de Quickcar",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      isDarkMode ? Colors.white : Colors.black45,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

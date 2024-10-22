@@ -369,10 +369,11 @@ class _SignInFormState extends State<SignInForm> {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 45),
+                backgroundColor: Colors.black87, 
               ),
               child: const Text(
                 'Iniciar sesión',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
