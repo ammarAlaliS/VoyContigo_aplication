@@ -8,7 +8,6 @@ import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/register_page.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/sign_in_page.dart';
-import 'package:quickcar_aplication/presentation/intro/set_system_color.dart';
 import 'package:quickcar_aplication/presentation/widgets/logo.dart';
 
 class SignUpOrSignIn extends StatelessWidget {
@@ -21,15 +20,6 @@ class SignUpOrSignIn extends StatelessWidget {
     final white = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final secudaryTextColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
     final isDarkMode = theme.brightness == Brightness.dark;
-
-    setSystemUIOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor:
-          isDarkMode ? Colors.black : Color.fromARGB(255, 219, 255, 238),
-      statusBarIconBrightness: isDarkMode ? Brightness.dark : Brightness.dark,
-      systemNavigationBarIconBrightness:
-          isDarkMode ? Brightness.dark : Brightness.dark,
-    );
 
     // Obtener el tamaño de la pantalla
     final screenWidth = MediaQuery.of(context).size.width;

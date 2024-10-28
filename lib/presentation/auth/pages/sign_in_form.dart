@@ -255,6 +255,40 @@ class _SignInFormState extends State<SignInForm> {
               ],
             ),
             SizedBox(height: 20),
+             ElevatedButton(
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
+
+                  // Manual validation
+                  setState(() {
+                    _emailError = _email.isEmpty
+                        ? 'Por favor, ingrese su correo electrónico'
+                        : null;
+                    _passwordError = _password.isEmpty
+                        ? 'Por favor, ingrese su contraseña'
+                        : null;
+                  });
+
+                  // Return early if there's an error
+                  if (_emailError != null || _passwordError != null) {
+                    return;
+                  }
+
+                  // Handle sign-in
+                  await handleSignIn(context);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 45),
+                backgroundColor: Colors.black87, 
+              ),
+              child: const Text(
+                'Iniciar sesión',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+              SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               textBaseline: TextBaseline.alphabetic,
@@ -302,6 +336,7 @@ class _SignInFormState extends State<SignInForm> {
               ],
             ),
             SizedBox(height: 10),
+            
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               textBaseline: TextBaseline.alphabetic,
@@ -343,39 +378,7 @@ class _SignInFormState extends State<SignInForm> {
             ),
             SizedBox(height: 30),
             // ElevatedButton for signing in
-            ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-
-                  // Manual validation
-                  setState(() {
-                    _emailError = _email.isEmpty
-                        ? 'Por favor, ingrese su correo electrónico'
-                        : null;
-                    _passwordError = _password.isEmpty
-                        ? 'Por favor, ingrese su contraseña'
-                        : null;
-                  });
-
-                  // Return early if there's an error
-                  if (_emailError != null || _passwordError != null) {
-                    return;
-                  }
-
-                  // Handle sign-in
-                  await handleSignIn(context);
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 45),
-                backgroundColor: Colors.black87, 
-              ),
-              child: const Text(
-                'Iniciar sesión',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+           
           ],
         ),
       ),

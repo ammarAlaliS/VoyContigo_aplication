@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:quickcar_aplication/core/configs/bloc/manage_status_bar_color.dart';
+import 'package:quickcar_aplication/core/configs/bloc/scroll_cubit.dart';
 import 'package:quickcar_aplication/core/configs/theme/app_theme.dart';
 import 'package:quickcar_aplication/firebase_options.dart';
 import 'package:quickcar_aplication/presentation/auth/bloc/cubit/user_cubit.dart';
@@ -38,7 +40,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => UserCubit()), 
+        BlocProvider(create: (_) => UserCubit()),
+        BlocProvider(create: (_) => StatusBarCubit()), 
+        BlocProvider(create: (_) => ScrollControllerCubit()), 
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) => MaterialApp(

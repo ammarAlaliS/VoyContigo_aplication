@@ -18,24 +18,8 @@ class BottomNavigatorBarPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: isDarkMode
-                ? const Color.fromARGB(255, 205, 204, 204).withOpacity(0.09)
-                : Colors.black.withOpacity(0.1),
-            width: 1,
-          ),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDarkMode ? Colors.black54 : Colors.grey.withOpacity(0.3),
-            offset: const Offset(0, 2),
-            blurRadius: 4,
-          ),
-        ],
-      ),
+    return Material(
+      elevation: 0,
       child: BottomNavigationBar(
         currentIndex: currentIndex,
         selectedItemColor: isDarkMode 
@@ -58,6 +42,9 @@ class BottomNavigatorBarPage extends StatelessWidget {
           fontSize: 12,
           color: Colors.white,
         ),
+        backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.black,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
@@ -74,15 +61,15 @@ class BottomNavigatorBarPage extends StatelessWidget {
     return List.generate(items.length, (index) {
       final item = items[index];
       final isSelected = currentIndex == index;
-      final iconColor = isSelected ?  Color.fromARGB(255, 255, 170, 86) : Colors.grey;
+      final iconColor = isSelected ? const Color.fromARGB(255, 255, 170, 86) : Colors.grey;
 
       return BottomNavigationBarItem(
-        backgroundColor: isDarkMode ? const Color.fromARGB(255, 5, 14, 26) : Colors.black,
         icon: SvgPicture.asset(
           item['icon']!,
           color: iconColor,
         ),
         label: item['label'],
+        tooltip: item['label'], // Mejora de accesibilidad
       );
     });
   }

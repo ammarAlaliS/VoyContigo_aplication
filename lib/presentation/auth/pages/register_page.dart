@@ -66,89 +66,97 @@ class _SignInPageState extends State<RegisterPage> with TickerProviderStateMixin
     final light = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: scaffoldBg,
-        resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
+        // Obtener el tamaño de la pantalla
+    final screenWidth = MediaQuery.of(context).size.width;
 
-              SvgPicture.asset(
-                AppVectors.texture,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+    // Ajustar los tamaños de fuente basados en el ancho de la pantalla
+    double titleFontSize = screenWidth * 0.07; // 6% del ancho de la pantalla
+    double subtitleFontSize = screenWidth * 0.044; // 4.5% del ancho de la pantalla
+
+    return Scaffold(
+      backgroundColor: scaffoldBg,
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+    
+            SvgPicture.asset(
+              AppVectors.texture,
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: isDarkMode
+                ? const Color.fromARGB(255, 14, 14, 14)
+                : const Color.fromARGB(109, 224, 224, 224),
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: SvgPicture.asset(
+                AppVectors.topPattern,
                 color: isDarkMode
-                    ? const Color.fromARGB(255, 14, 14, 14)
-                    : const Color.fromARGB(255, 243, 243, 243),
+                    ? Colors.cyan
+                    : const Color.fromARGB(255, 4, 4, 4),
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: SvgPicture.asset(
-                  AppVectors.topPattern,
-                  color: isDarkMode
-                      ? Colors.cyan
-                      : const Color.fromARGB(255, 4, 4, 4),
-                ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: SvgPicture.asset(
+                AppVectors.buttomPattern,
+                color: isDarkMode
+                    ? Colors.cyan
+                    : const Color.fromARGB(255, 4, 4, 4),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: SvgPicture.asset(
-                  AppVectors.buttomPattern,
-                  color: isDarkMode
-                      ? Colors.cyan
-                      : const Color.fromARGB(255, 4, 4, 4),
-                ),
-              ),
-            
-              Column(
-                mainAxisSize: MainAxisSize.min, 
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedBuilder(
+            ),
+          
+            Column(
+              mainAxisSize: MainAxisSize.min, 
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+               AnimatedBuilder(
                     animation: _animation,
                     builder: (context, child) {
                       return Container(
                         transform: Matrix4.translationValues(_animation.value, 0, 0),
                         child: child,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 219, 255, 238),
+                          shape: BoxShape.circle,
+                        ),
                       );
                     },
                     child: Logo(),
                   ),
-                  SizedBox(height: 20),
-                  AnimatedOpacity(
-                    opacity: _isTextVisible ? _opacityAnimation.value : 0,
-                    duration: const Duration(milliseconds: 500),
-                    child: Text(
-                      'Antes de comenzar, ingresa tu información',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                        color: light,
-                        height: 1.2,
-                        letterSpacing: -1.6,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                SizedBox(height: 20),
+                AnimatedOpacity(
+                  opacity: _isTextVisible ? _opacityAnimation.value : 0,
+                  duration: const Duration(milliseconds: 500),
+                  child: Text(
+                    'Antes de comenzar, ingresa tu información',
+                   style: TextStyle(
+                          fontSize: titleFontSize, 
+                          fontWeight: FontWeight.w800,
+                          color: light,
+                          letterSpacing: -2),
+                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 40),
-                  AnimatedBuilder(
-                    animation: _translationAnimation,
-                    builder: (context, child) {
-                      return Transform.translate(
-                        offset: Offset(0, _translationAnimation.value),
-                        child: child,
-                      );
-                    },
-                    child: RegisterForm(),
-                  ),
-                
-                ],
-              ),
-            ],
-          ),
+                ),
+                SizedBox(height: 40),
+                AnimatedBuilder(
+                  animation: _translationAnimation,
+                  builder: (context, child) {
+                    return Transform.translate(
+                      offset: Offset(0, _translationAnimation.value),
+                      child: child,
+                    );
+                  },
+                  child: RegisterForm(),
+                ),
+              
+              ],
+            ),
+          ],
         ),
       ),
     );

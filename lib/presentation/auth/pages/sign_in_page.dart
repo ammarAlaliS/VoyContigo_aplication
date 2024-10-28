@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quickcar_aplication/common/widgets/appbar/app_bar_buttom.dart';
-import 'package:quickcar_aplication/core/configs/assets/app_images.dart';
 import 'package:quickcar_aplication/core/configs/assets/app_vectors.dart';
 import 'package:quickcar_aplication/presentation/auth/pages/sign_in_form.dart';
 import 'package:quickcar_aplication/presentation/intro/set_system_color.dart';
@@ -77,16 +74,10 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
     final light = theme.textTheme.bodyLarge?.color ?? Colors.black;
     final isDarkMode = theme.brightness == Brightness.dark;
 
-   setSystemUIOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: isDarkMode ? Colors.black : Color.fromARGB(255, 219, 255, 238),
-      statusBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-      systemNavigationBarIconBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-    );
-
+  
     return Scaffold(
       backgroundColor: scaffoldBg,
-         extendBody: true,
+      extendBody: true,
       extendBodyBehindAppBar: true,
       body: Center(
         child: Stack(
@@ -120,23 +111,22 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
               ),
             ),
             // Contenido principal
-            Center( // Añadido para centrar el contenido verticalmente
+            Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center, // Asegura que el contenido esté centrado
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AnimatedBuilder(
                       animation: _animation,
                       builder: (context, child) {
                         return Container(
-                          transform:
-                              Matrix4.translationValues(_animation.value, 0, 0),
+                          transform: Matrix4.translationValues(_animation.value, 0, 0),
                           child: child,
                           height: 150,
                           decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 219, 255, 238),
+                            color: Color.fromARGB(255, 219, 255, 238),
                             shape: BoxShape.circle,
                           ),
                         );
@@ -147,16 +137,19 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                     AnimatedOpacity(
                       opacity: _isTextVisible ? _opacityAnimation.value : 0,
                       duration: const Duration(milliseconds: 500),
-                      child: Text(
-                        'INICIA SESION Y COMIENZA A CREAR EXPERIENCIAS UNICAS',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w800,
-                          color: light,
-                          height: 1.2,
-                          letterSpacing: -0.9,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'INICIA SESION Y COMIENZA A CREAR EXPERIENCIAS UNICAS',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w800,
+                            color: light,
+                            height: 1.2,
+                            letterSpacing: -0.9,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(height: 20),
@@ -171,12 +164,12 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                       child: SignInForm(),
                     ),
                     const SizedBox(height: 50),
-                    // Mantenemos el widget de términos visible desde el principio, solo controlamos la opacidad
+                    // Términos y condiciones al final
                     AnimatedOpacity(
-                      opacity: _areTermsVisible ? 1 : 0, // Controla la opacidad según el estado
+                      opacity: _areTermsVisible ? 1 : 0,
                       duration: const Duration(milliseconds: 500),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         child: Center(
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
@@ -187,8 +180,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black45,
+                                  color: isDarkMode ? Colors.white : Colors.black45,
                                 ),
                               ),
                               SizedBox(width: 5),
@@ -199,8 +191,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w900,
-                                    color:
-                                        isDarkMode ? Colors.cyan : Colors.black,
+                                    color: isDarkMode ? Colors.cyan : Colors.black,
                                   ),
                                 ),
                               ),
@@ -209,8 +200,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black45,
+                                  color: isDarkMode ? Colors.white : Colors.black45,
                                 ),
                               ),
                               InkWell(
@@ -220,8 +210,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w900,
-                                    color:
-                                        isDarkMode ? Colors.cyan : Colors.black,
+                                    color: isDarkMode ? Colors.cyan : Colors.black,
                                   ),
                                 ),
                               ),
@@ -230,8 +219,7 @@ class _SignInPageState extends State<SignInPage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color:
-                                      isDarkMode ? Colors.white : Colors.black45,
+                                  color: isDarkMode ? Colors.white : Colors.black45,
                                 ),
                               ),
                             ],

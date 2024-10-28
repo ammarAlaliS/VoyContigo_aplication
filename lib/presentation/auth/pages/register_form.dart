@@ -94,7 +94,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 ),
                                 SizedBox(width: 10),
                                 SvgPicture.asset(AppVectors.user,
-                                    color: Color(0xFF02EAFF)),
+                                    color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 0, 0)),
                                 SizedBox(width: 10),
                                 Expanded(
                                   child: Container(
@@ -213,7 +213,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                 ),
                                 SizedBox(width: 10),
                                 SvgPicture.asset(AppVectors.user,
-                                    color: Color(0xFF02EAFF)),
+                                     color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 0, 0)),
                                 SizedBox(width: 10),
                                 Expanded(
                                   child: Container(
@@ -333,7 +333,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           ),
                           SizedBox(width: 10),
                           SvgPicture.asset(AppVectors.mail,
-                              color: Color(0xFF02EAFF)),
+                                color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 0, 0)),
                           SizedBox(width: 10),
                           Expanded(
                             child: Container(
@@ -451,7 +451,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           SizedBox(width: 10),
                           SvgPicture.asset(
                             AppVectors.lock,
-                            color: Color(0xFF02EAFF),
+                           color: isDarkMode ? Colors.white : Color.fromARGB(255, 0, 0, 0)
                           ),
                           SizedBox(width: 10),
                           Expanded(
@@ -579,10 +579,11 @@ class _RegisterFormState extends State<RegisterForm> {
               },
               child: const Text(
                 'Crear cuenta',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: Colors.white),
               ),
-              style: ElevatedButton.styleFrom(
+             style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 45),
+                backgroundColor: Colors.black87, 
               ),
             ),
           ],
